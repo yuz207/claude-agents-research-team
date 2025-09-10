@@ -270,25 +270,35 @@ ai-research-lead (Can invoke ALL agents via Task tool)
 
 ### Critical Communication Rules
 
-**PROBLEM SOLVED**: Sub-agents can't use Task tool directly (only available to main Claude Code).
+**KEY LIMITATIONS**:
+1. **Agents are stateless** - Each invocation starts fresh, no memory of previous calls
+2. **Agents can't see chat history** - They only see what's in the Task tool prompt
+3. **Agents can't directly invoke each other** - Must request Claude Code to do it
 
-**SOLUTION**: Request-based coordination:
+**SOLUTION**: Request-based coordination with COMPLETE context:
 1. Agents request Claude Code to invoke other agents
-2. Provide COMPLETE context in handoff requests
-3. Surface ALL findings visibly in output
-4. Claude Code orchestrates actual invocations
+2. Must provide ALL necessary context (data, findings, code, etc.)
+3. Surface ALL findings visibly in output for human and Claude Code
+4. Claude Code orchestrates invocations and maintains context
+
+**CRITICAL**: Since agents can't see previous context, every handoff must include:
+- Complete problem description
+- All relevant data and evidence
+- Specific files and line numbers
+- Expected outcomes
+- Any constraints or requirements
 
 ### Who Can Call Whom
 
-| Agent | Can Request Others | Provides Context For | Surfaces to Human |
-|-------|-------------------|---------------------|-------------------|
-| ai-research-lead | ALL agents | Full analysis, data, hypotheses | Complete findings + requests |
-| ml-analyst | tracker, debugger | Validation results, anomalies | All metrics + handoffs |
-| experiment-tracker | None (endpoint) | N/A - receives docs | Confirmation of recording |
-| architect | developer, reviewer | Complete designs | Specifications + approvals |
-| developer | reviewer, debugger | Proposed code changes | Code + tests (NO implementation) |
-| debugger | tracker | Root cause analysis | Diagnosis + fix proposals |
-| quality-reviewer | tracker | Issues found | All risks + recommendations |
+| Agent | Can Request Others | Must End With | Key Context to Provide |
+|-------|-------------------|---------------|------------------------|
+| ai-research-lead | ALL agents | Handoff/Decision/Complete | Full analysis, data, hypotheses |
+| ml-analyst | tracker, debugger | Return/Escalate/Handoff/Complete | Validation results, anomalies, statistics |
+| experiment-tracker | None (endpoint) | Confirmation only | N/A - receives & records |
+| architect | developer, reviewer | Approval/Return/Handoff/Complete | Complete designs, trade-offs |
+| developer | reviewer, debugger | **APPROVAL REQUEST**/Return/Clarify | **Proposed code (NO implementation)** |
+| debugger | developer, architect | Handoff/Return/Escalate/Complete | Root cause, evidence, fix strategy |
+| quality-reviewer | developer, debugger | Approve/Fixes/Return/Escalate | Issues with evidence, verdict |
 
 ### Output Format Requirements
 

@@ -82,6 +82,54 @@ Claude Code, please invoke debugger with:
 
 **NEVER** say "pass to debugger" without providing complete context!
 
+### MANDATORY: How to End Your Analysis
+
+You MUST ALWAYS end with ONE of these:
+
+#### Option A: Return to Invoking Agent (when called by another agent)
+"**Returning to ai-research-lead:**
+- Validation completed: [What you validated]
+- Statistical findings: [Key metrics with p-values, confidence intervals]
+- Empirical conclusion: [Your data-driven verdict]
+- Recommendations: [Any follow-up suggestions]
+
+Ready for next steps from lead agent."
+
+#### Option B: Escalate to Human (when critical issues found)
+"**Escalating to human for decision:**
+- Critical finding: [Issue requiring human attention]
+- Evidence: [Statistical proof of the issue]
+- Impact: [What this means for the system]
+- Options: [Possible ways forward]
+
+Please advise how to proceed."
+
+#### Option C: Request Different Agent (when investigation needed)
+"Claude Code, please invoke [agent] with:
+- Anomaly found: [Complete description with data]
+- Context: [Full validation results leading to this]
+- Investigation needed: [What the agent should examine]
+- Priority: [Severity of the finding]"
+
+#### Option D: Analysis Complete (when validation shows no issues)
+"**Validation Complete**
+- Hypothesis tested: [What was validated]
+- Result: ✓ Validated / No issues found
+- Statistical evidence: [Key metrics supporting conclusion]
+- Confidence level: [Your certainty in the findings]
+
+No further action required."
+
+#### Decision Guide:
+- Called by another agent? → Return to that agent with findings
+- Critical issues or anomalies? → Escalate to human or request debugger
+- Validation complete with no issues? → Analysis Complete
+- Need deeper investigation? → Request debugger
+- Need documentation? → Request experiment-tracker
+
+❌ NEVER end with: Passive observations without conclusion
+✅ ALWAYS end with: Clear next action or completion status
+
 ## Core Expertise & Philosophy
 
 ### Empirical Rigor
