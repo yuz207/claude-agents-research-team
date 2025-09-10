@@ -270,24 +270,25 @@ ai-research-lead (Can invoke ALL agents via Task tool)
 
 ### Critical Communication Rules
 
-**PROBLEM BEING SOLVED**: Agent outputs were getting buried in internal Task tool calls, invisible to you.
+**PROBLEM SOLVED**: Sub-agents can't use Task tool directly (only available to main Claude Code).
 
-**SOLUTION**: Every agent that calls another agent MUST:
-1. Actually invoke them using Task tool (not just describe)
-2. Include their COMPLETE output in the final report
-3. Never summarize or hide delegated findings
+**SOLUTION**: Request-based coordination:
+1. Agents request Claude Code to invoke other agents
+2. Provide COMPLETE context in handoff requests
+3. Surface ALL findings visibly in output
+4. Claude Code orchestrates actual invocations
 
 ### Who Can Call Whom
 
-| Agent | Has Task Tool | Can Invoke | Purpose |
-|-------|--------------|------------|----------|
-| ai-research-lead | ✅ YES | ALL agents | Orchestrates entire team |
-| ml-analyst | ✅ YES | experiment-tracker, debugger | Document findings, investigate |
-| experiment-tracker | ❌ NO | None (endpoint) | Receives & stores documentation |
-| architect | ❓ TBD | developer, reviewer | Design implementation |
-| developer | ❓ TBD | quality-reviewer, debugger | Review & debug |
-| debugger | ❓ TBD | experiment-tracker | Document root causes |
-| quality-reviewer | ❓ TBD | experiment-tracker | Document issues |
+| Agent | Can Request Others | Provides Context For | Surfaces to Human |
+|-------|-------------------|---------------------|-------------------|
+| ai-research-lead | ALL agents | Full analysis, data, hypotheses | Complete findings + requests |
+| ml-analyst | tracker, debugger | Validation results, anomalies | All metrics + handoffs |
+| experiment-tracker | None (endpoint) | N/A - receives docs | Confirmation of recording |
+| architect | developer, reviewer | Complete designs | Specifications + approvals |
+| developer | reviewer, debugger | Proposed code changes | Code + tests (NO implementation) |
+| debugger | tracker | Root cause analysis | Diagnosis + fix proposals |
+| quality-reviewer | tracker | Issues found | All risks + recommendations |
 
 ### Output Format Requirements
 
@@ -313,63 +314,46 @@ Every agent MUST structure outputs as:
 ### Common Communication Patterns
 
 #### Research → Validation → Documentation
-```python
-# ai-research-lead does:
-my_analysis = analyze_hypothesis()
+```markdown
+# ai-research-lead outputs:
+## My Complete Analysis
+- Finding: Model degrades at step 2500
+- Data: Loss jumps from 0.02 to 7.5
+- Pattern: Consistent across 5 runs
 
-validation = Task(
-    subagent_type="ml-analyst",
-    description="Validate hypothesis",
-    prompt=f"Validate this finding: {my_analysis}"
-)
+## Validation Request
+Claude Code, please invoke ml-analyst with:
+- Finding: [complete finding with data]
+- Statistical test needed: [specific test]
+- Data: [actual data points]
 
-documentation = Task(
-    subagent_type="experiment-tracker",
-    description="Document experiment",
-    prompt=f"Document experiment with these results: {my_analysis}, {validation}"
-)
-
-# CRITICAL: Return ALL outputs to human
-return f"""
-## My Analysis
-{my_analysis}
-
-## ML-Analyst Validation
-{validation}  # Full output visible to human!
-
-## Documentation Confirmation
-{documentation}
-"""
+# Claude Code then:
+1. Invokes ml-analyst with full context
+2. ml-analyst validates and outputs results
+3. Claude Code shows you everything
+4. You approve next steps
 ```
 
 #### Finding → Investigation → Documentation
-```python
-# ml-analyst does:
-anomaly = find_anomaly()
+```markdown
+# ml-analyst outputs:
+## Anomaly Detected
+- Metric: Attention weights all zero after layer 4
+- Impact: 15% accuracy drop
+- Samples affected: 2,341 of 10,000
 
-investigation = Task(
-    subagent_type="debugger",
-    description="Investigate anomaly",
-    prompt=f"Root cause analysis for: {anomaly}"
-)
+## Investigation Request
+Claude Code, please invoke debugger with:
+- Anomaly: [complete description]
+- Data: [actual examples]
+- Files: model.py lines 234-267
+- Need: Root cause analysis
 
-record = Task(
-    subagent_type="experiment-tracker",
-    description="Document anomaly",
-    prompt=f"Record anomaly: {anomaly}, root cause: {investigation}"
-)
-
-# Return everything
-return f"""
-## Anomaly Detection
-{anomaly}
-
-## Debugger Root Cause Analysis
-{investigation}  # Full debugger output!
-
-## Documented By Tracker
-{record}
-"""
+# Flow:
+1. Claude Code invokes debugger
+2. Debugger analyzes and proposes fix
+3. Claude Code presents to you
+4. You approve before ANY code changes
 ```
 
 ### Why Proper Communication Matters
