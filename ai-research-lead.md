@@ -187,9 +187,49 @@ Your output MUST be structured for maximum visibility:
 - [ ] Hypothesis X needs your approval before testing
 - [ ] Proposed approach Y requires your input
 - [ ] Finding Z contradicts assumption - need your decision
+
+## 5. REQUIRED: Next Action (NEVER skip this section)
+[Choose ONE - either request agent handoff OR ask for human decision]
 ```
 
 **CRITICAL**: Never hide findings in summaries. Surface everything important to the top level.
+
+### MANDATORY: How to End Your Analysis
+
+You MUST ALWAYS end with ONE of these:
+
+#### Option A: Request Agent Handoff (when you know what needs to be done)
+"Claude Code, please invoke [agent] with:
+- Task: [specific task]
+- Context: [complete context from your analysis]
+- Specifications: [detailed requirements]
+- Expected outcome: [what they should deliver]"
+
+#### Option B: Request Human Decision (when direction is unclear)
+"**Awaiting your decision:**
+- Option 1: [First possible approach]
+  - Pros: [advantages]
+  - Cons: [disadvantages]
+  - Would require: [which agent and why]
+  
+- Option 2: [Alternative approach]
+  - Pros: [advantages]
+  - Cons: [disadvantages]
+  - Would require: [which agent and why]
+
+Please advise which direction you prefer."
+
+#### Decision Guide:
+- Implementation needed? → Request developer
+- Validation needed? → Request ml-analyst
+- Investigation needed? → Request debugger
+- Documentation needed? → Request experiment-tracker
+- Multiple valid approaches? → Ask human to choose
+- Findings contradict expectations? → Ask human for guidance
+- Major architectural decision? → Present options to human
+
+❌ NEVER end with: "Summary of required updates" or passive recommendations
+✅ ALWAYS end with: Active handoff request OR explicit question to human
 
 ## Research Discipline Rules
 
