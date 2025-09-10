@@ -251,6 +251,143 @@ Evidence attached: [graphs, statistical tests, data tables]"
 
 ---
 
+## Agent Communication Architecture
+
+### Communication Flow
+```
+Human (You)
+    ↓
+Claude Code (Executive Interface)
+    ↓
+ai-research-lead (Can invoke ALL agents via Task tool)
+    ├→ ml-analyst (Has Task tool - can invoke tracker & debugger)
+    ├→ experiment-tracker (No Task tool - receives documentation)
+    ├→ architect (May have Task tool for dev & reviewer)
+    ├→ developer (May have Task tool for reviewer & debugger)
+    ├→ debugger (May have Task tool for tracker)
+    └→ quality-reviewer (May have Task tool for tracker)
+```
+
+### Critical Communication Rules
+
+**PROBLEM BEING SOLVED**: Agent outputs were getting buried in internal Task tool calls, invisible to you.
+
+**SOLUTION**: Every agent that calls another agent MUST:
+1. Actually invoke them using Task tool (not just describe)
+2. Include their COMPLETE output in the final report
+3. Never summarize or hide delegated findings
+
+### Who Can Call Whom
+
+| Agent | Has Task Tool | Can Invoke | Purpose |
+|-------|--------------|------------|----------|
+| ai-research-lead | ✅ YES | ALL agents | Orchestrates entire team |
+| ml-analyst | ✅ YES | experiment-tracker, debugger | Document findings, investigate |
+| experiment-tracker | ❌ NO | None (endpoint) | Receives & stores documentation |
+| architect | ❓ TBD | developer, reviewer | Design implementation |
+| developer | ❓ TBD | quality-reviewer, debugger | Review & debug |
+| debugger | ❓ TBD | experiment-tracker | Document root causes |
+| quality-reviewer | ❓ TBD | experiment-tracker | Document issues |
+
+### Output Format Requirements
+
+Every agent MUST structure outputs as:
+
+```markdown
+## My Primary Analysis
+[The agent's own findings]
+
+## ML-Analyst Validation (if invoked)
+[COMPLETE output from ml-analyst - not summarized]
+
+## Experiment Tracker Record (if invoked)
+[COMPLETE output from tracker - not summarized]
+
+## Debugger Investigation (if invoked)
+[COMPLETE output from debugger - not summarized]
+
+## Synthesis
+[Combined insights from all sources]
+```
+
+### Common Communication Patterns
+
+#### Research → Validation → Documentation
+```python
+# ai-research-lead does:
+my_analysis = analyze_hypothesis()
+
+validation = Task(
+    subagent_type="ml-analyst",
+    description="Validate hypothesis",
+    prompt=f"Validate this finding: {my_analysis}"
+)
+
+documentation = Task(
+    subagent_type="experiment-tracker",
+    description="Document experiment",
+    prompt=f"Document experiment with these results: {my_analysis}, {validation}"
+)
+
+# CRITICAL: Return ALL outputs to human
+return f"""
+## My Analysis
+{my_analysis}
+
+## ML-Analyst Validation
+{validation}  # Full output visible to human!
+
+## Documentation Confirmation
+{documentation}
+"""
+```
+
+#### Finding → Investigation → Documentation
+```python
+# ml-analyst does:
+anomaly = find_anomaly()
+
+investigation = Task(
+    subagent_type="debugger",
+    description="Investigate anomaly",
+    prompt=f"Root cause analysis for: {anomaly}"
+)
+
+record = Task(
+    subagent_type="experiment-tracker",
+    description="Document anomaly",
+    prompt=f"Record anomaly: {anomaly}, root cause: {investigation}"
+)
+
+# Return everything
+return f"""
+## Anomaly Detection
+{anomaly}
+
+## Debugger Root Cause Analysis
+{investigation}  # Full debugger output!
+
+## Documented By Tracker
+{record}
+"""
+```
+
+### Why Proper Communication Matters
+
+**Before fixes**:
+- ai-research-lead calls ml-analyst → output hidden from you
+- ml-analyst validates something → experiment-tracker never knows
+- Valuable insights buried in internal agent communications
+- You only see final summary, miss critical details
+
+**After fixes**:
+- Every agent call's output included in reports
+- Complete visibility into all findings
+- Experiment-tracker receives documentation from multiple agents
+- Full audit trail of decisions and discoveries
+
+---
+
 ## Interaction Workflows
 
 ### Weekly Research Workflow
