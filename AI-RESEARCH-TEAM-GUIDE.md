@@ -11,12 +11,32 @@ research_team:
     - ai-research-lead      # PI: Designs, experiments, analyzes
     - ml-analyst           # Validates, profiles, optimizes
     - experiment-tracker   # Documents everything
-    
   research_engineers:     # Called when needed for implementation
     - architect           # Designs complex system architectures
     - developer          # Implements new architectures cleanly
     - debugger           # Diagnoses training failures
     - quality-reviewer   # Pre-production validation
+```
+
+```yaml
+core_research_team:
+   ai-research-lead:
+      does_everything:
+         - Architecture design
+         - Training experiments
+         - Data handling (no separate data-engineer needed)
+         - Compute management (no separate ml-engineer needed)
+         - Initial analysis
+   ml-analyst:
+      validates_everything:
+         - Statistical rigor
+         - Empirical verification
+         - Benchmark comparisons
+   experiment-tracker:
+      documents_everything:
+         - Experiments
+         - Decisions
+         - Context
 ```
 
 ## Command Structure
@@ -148,39 +168,54 @@ Evidence attached: [graphs, statistical tests, data tables]"
 
 ---
 
-### ⚙️ **ml-engineer** (ML Deployment & Optimization Specialist)
-**Role**: Implementation and deployment expert  
-**Quick Summary**: Handles model deployment, optimization, and infrastructure
+### 🏗️ **architect** (Research Engineer - System Design)
+**Role**: Designs complex implementations for novel architectures  
+**Quick Summary**: Called when research needs sophisticated system design
 
 **Key Responsibilities**:
-- Model deployment and serving
-- Performance optimization
-- Compute resource management
-- Distributed training setup
-- Container orchestration
+- Design specifications for novel architectures
+- Complex system integration patterns
+- Performance architecture for training systems
+- Never implements, only designs
 
-**Interfaces With**:
-- **Reports to**: ai-research-lead
-- **Receives models from**: ai-research-lead after validation
-- **Coordinates with**: data-engineer for pipelines
+**When Called**:
+- New architecture needs detailed specification
+- Complex multi-component systems
+- Distributed training architecture
 
 ---
 
-### 🔧 **data-engineer** (Data Pipeline Specialist)
-**Role**: Data infrastructure and pipeline expert  
-**Quick Summary**: Manages data flows, quality, and infrastructure
+### 💻 **developer** (Research Engineer - Implementation)
+**Role**: Clean implementation of research ideas  
+**Quick Summary**: Implements novel architectures with production-quality code
 
 **Key Responsibilities**:
-- Build and maintain data pipelines
-- Data quality assurance
-- Dataset curation and versioning
-- Privacy compliance
-- ETL processes
+- Implement new layers/modules/architectures
+- Write comprehensive tests
+- Ensure code quality and documentation
+- Follow specifications precisely
 
-**Interfaces With**:
-- **Reports to**: ai-research-lead
-- **Provides data to**: All agents
-- **Coordinates with**: ml-engineer for model pipelines
+**When Called**:
+- New architecture needs implementation
+- Complex modifications to existing code
+- Need clean, reproducible implementation
+
+---
+
+### 🔍 **debugger** (Research Engineer - Diagnostics)
+**Role**: Diagnoses training failures and mysterious behaviors  
+**Quick Summary**: Systematic investigation of model/training issues
+
+**Key Responsibilities**:
+- Root cause analysis of training failures
+- Investigate NaN losses, gradient explosions
+- Debug convergence issues
+- Evidence-based diagnosis only
+
+**When Called**:
+- Training mysteriously fails
+- Model exhibits unexpected behavior
+- Need deep investigation of numerical issues
 
 ---
 
