@@ -135,6 +135,73 @@ Save to: `experiments/checkpoint_YYYYMMDD_HHMMSS.md`
 [Exactly what to do next when resuming]
 ```
 
+### Extraction Process (After Creating Checkpoint)
+
+From the checkpoint, extract individual analyses as separate files:
+
+**Template for `experiments/by_date/YYYY-MM-DD/analysis_XXX.md`:**
+```markdown
+# Analysis_[XXX]: [Type] Analysis
+Run ID: [user_run_XXX or uploaded_log_descriptor]
+Date: YYYY-MM-DD HH:MM
+Priority: [CRITICAL/HIGH/MEDIUM/LOW]
+
+## Context
+[Why this analysis was performed, what hypothesis being tested, comparison being made]
+Example: "Testing linear decay at 10K steps for learning rate optimization series"
+
+## Method
+- Analysis type: [Statistical/Performance/Accuracy/etc]
+- Performed by: [agent name]
+- Script used: [filename if applicable]
+- Data size: [N samples, duration, etc]
+
+## Results
+- Key finding: [Primary result with statistical significance]
+- Secondary findings: [Other discoveries]
+- Issues identified: [Any problems found]
+
+## Artifacts
+- Figures: [List with paths]
+- Data files: [List with paths and sizes]
+- Scripts: [New or modified scripts]
+
+## Human Decision
+[Any decisions made based on this analysis]
+
+## Related Analyses
+[Links to related analysis IDs]
+```
+
+### Update Index
+Append to `experiments/analyses_index.csv`:
+```csv
+id,date,run_id,type,context,key_finding,priority,checkpoint_ref
+001,2024-01-15,run_047,speed,linear decay test,47%-speedup,HIGH,checkpoint_20240115_1432
+```
+
+### Autosave Format
+Update `experiments/AUTOSAVE.md` every 10% context:
+```markdown
+# AUTOSAVE - Session [Date]
+## Context Usage: [X]%
+
+## Analyses This Session
+- Analysis_001: [Brief description] ([key result])
+- Analysis_002: [Brief description] ([key result])
+
+## Critical Findings
+- [CRITICAL] [Finding that must survive]
+- [HIGH] [Important discovery]
+
+## Pending
+- [Unfinished tasks]
+- [Awaiting decisions]
+
+## Resume Instructions
+[What to do when session resumes]
+```
+
 ### Compression Strategies
 - **Priority-based**: Keep all CRITICAL/HIGH items verbatim
 - **Deduplication**: Compress repeated experiments to statistical summary

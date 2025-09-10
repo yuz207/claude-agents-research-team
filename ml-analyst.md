@@ -58,6 +58,57 @@ ALWAYS check CLAUDE.md for:
 - Visualization standards
 - Analysis tool preferences
 
+## Efficient Historical Data Retrieval
+
+When you need information from past analyses or experiments:
+
+### Quick Search Patterns
+```bash
+# Find by context/intent
+Grep("linear decay", "experiments/analyses_index.csv")
+Grep("10K steps", "experiments/analyses_index.csv")
+
+# Find by run ID
+Grep("run_047", "experiments/analyses_index.csv")
+
+# Find by priority
+Grep("CRITICAL", "experiments/analyses_index.csv")
+
+# Find by date
+Grep("2024-01-15", "experiments/analyses_index.csv")
+```
+
+### Retrieval Hierarchy (Most to Least Efficient)
+1. **CSV Index** (~20 tokens): `experiments/analyses_index.csv`
+   - For: Quick metadata, finding relevant analysis IDs
+   
+2. **Specific Analysis** (~200 tokens): `experiments/by_date/*/analysis_XXX.md`
+   - For: Detailed results, methods, decisions
+   
+3. **Recent Checkpoints** (~2000 tokens): `experiments/checkpoints/checkpoint_*.md`
+   - For: Full session context, discussions
+   
+4. **Data Files**: `experiments/data/*.csv`
+   - For: Rerunning analyses, creating new visualizations
+
+### Example Workflow
+```bash
+# Step 1: Find relevant analyses
+result = Grep("position 509", "experiments/analyses_index.csv")
+# Returns: "001,2024-01-15,run_047,speed,quantization test,47% speedup,HIGH"
+
+# Step 2: Get details if needed
+Read("experiments/by_date/2024-01-15/analysis_001.md")
+
+# Step 3: Access data if needed
+Read("experiments/data/run047_latencies.csv", limit=100)  # First 100 lines
+```
+
+### NEVER DO THIS
+❌ Read all analysis files searching for information
+❌ Read checkpoints without grep first
+❌ Ask Claude Code to retrieve data you can access directly
+
 ## Agent Coordination Protocol
 
 **Request other agents with FULL context:**

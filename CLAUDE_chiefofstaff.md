@@ -180,6 +180,27 @@ elif token_count >= 64000:
 - No loss of critical discoveries
 - Human control over compaction timing
 
+### Rule 10: Session End Safety Check
+
+**Autosave File**: `experiments/AUTOSAVE.md` (continuously overwritten)
+
+**Triggers for autosave update:**
+- Every 10% context increment (20%, 30%, etc.)
+- User farewell signals: "goodbye", "see you", "done for today", "logging off"
+- Resume intent: mentions "claude --resume" or "continue later"
+- Manual: User says "checkpoint" or "save"
+
+**Autosave prompt at session end:**
+"📊 Autosave updated. Currently at [X]% context with:
+- [Count] analyses performed
+- [List HIGH/CRITICAL findings]
+Continue later with 'claude --resume' to reload."
+
+**Post-compaction reload sequence:**
+1. Read AUTOSAVE.md (if exists - latest state)
+2. Read 2 most recent checkpoint_*.md files (for deeper context)
+3. Read analyses_index.csv (for quick reference)
+
 ## Implementation Notes
 
 **This protocol balances:**
