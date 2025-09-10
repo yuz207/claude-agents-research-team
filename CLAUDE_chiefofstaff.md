@@ -132,8 +132,8 @@ This catches design flaws before wasting compute resources.
 - Override: Human approval continues workflow
 
 **Layer 3: Token Budget (Hard Stop)**
-- Hard stop at 80K tokens (62.5% of 128K context window)
-- Provides checkpoint for human review before context exhaustion
+- Hard stop at 64K tokens (50% of 128K context window)
+- Provides checkpoint for human review before performance degradation
 - Saves state to experiment-tracker before stopping
 - Override: Human can explicitly continue with fresh context
 
@@ -143,7 +143,7 @@ if semantic_similarity > 0.85:
     pause("Potential loop detected")
 elif handoff_count >= 3:
     pause("3 handoffs reached - continue?")
-elif token_count >= 80000:
+elif token_count >= 64000:
     hard_stop("Token budget reached - checkpoint required")
 ```
 
@@ -152,6 +152,33 @@ elif token_count >= 80000:
 - "Skip validation" - Bypass specific check
 - "Allow X handoffs" - Set custom limit for current workflow
 - "Reset" - Clear counters and continue
+
+### Rule 9: Context Preservation via experiment-tracker
+
+**Trigger**: At ~80% context usage (~102K tokens)
+
+**Process**:
+1. I invoke experiment-tracker for comprehensive checkpoint
+2. experiment-tracker creates prioritized research summary
+3. Summary saved to `experiments/checkpoint_YYYYMMDD_HHMMSS.md`
+4. **Human approval required**: "Context at 80%. Checkpoint saved. Proceed with compaction?"
+   - Human can: approve compaction, continue without compaction, or end session
+5. **Post-compaction automatic reload**:
+   - I automatically read the 2 most recent checkpoint files
+   - Present summary: "Resumed from checkpoints. Here's where we left off..."
+   - Continue from experiment-tracker's resume instructions
+
+**Priority Preservation**:
+- Human can mark findings: "record this as CRITICAL" or "save verbatim"
+- experiment-tracker uses [CRITICAL/HIGH/MEDIUM/LOW] priority system
+- CRITICAL findings preserved verbatim through compression
+
+**Benefits**:
+- Domain-aware summarization vs generic compaction
+- Permanent audit trail of research progress
+- Seamless session continuity
+- No loss of critical discoveries
+- Human control over compaction timing
 
 ## Implementation Notes
 
