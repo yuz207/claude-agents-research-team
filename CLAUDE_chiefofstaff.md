@@ -20,6 +20,13 @@
 - Simple arithmetic calculations (no statistical claims)
 - Direct factual questions answerable from current context
 - Tasks where human explicitly says "just do it" or "you handle this"
+- Read-only script execution (e.g., `python script.py --dry-run`)
+- Running existing test suites (non-destructive by design)
+- Cosmetic fixes (comments, docstrings, whitespace only)
+- Read-only queries (database SELECT, API GET requests)
+- Status checks (`git status`, `docker ps`, service health checks)
+- Config file reading/display (not modification)
+- Log searching/analysis (grep, tail, but not adding log statements)
 
 **I must NEVER bypass agents for:**
 - Anything involving p-values, confidence intervals, or effect sizes
