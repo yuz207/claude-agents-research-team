@@ -16,6 +16,9 @@ research_team:
     - developer          # Implements new architectures cleanly
     - debugger           # Diagnoses training failures
     - quality-reviewer   # Pre-production validation
+  potential_future_members:
+    - technical-writer     # Manuscript preparation, literature review
+    - science-critic      # Devil's advocate, challenges assumptions
 ```
 
 ```yaml
@@ -216,6 +219,35 @@ Evidence attached: [graphs, statistical tests, data tables]"
 - Training mysteriously fails
 - Model exhibits unexpected behavior
 - Need deep investigation of numerical issues
+
+---
+
+### 📚 **technical-writer** (Potential Future Member)
+**Role**: Technical documentation and literature synthesis  
+**Quick Summary**: Would transform research into manuscripts and conduct literature reviews
+
+**Potential Responsibilities**:
+- Write research papers and technical reports
+- Conduct systematic literature reviews
+- Prepare grant proposals and documentation
+- Transform experiment logs into publication-ready content
+
+**Note**: Currently not active. Experiment-tracker handles raw documentation.
+
+---
+
+### 🔬 **science-critic** (Potential Future Member)
+**Role**: Devil's advocate and methodological skeptic  
+**Quick Summary**: Would challenge assumptions and identify blind spots
+
+**Potential Responsibilities**:
+- Challenge experimental designs for bias
+- Identify confounding variables
+- Question causal assumptions
+- Suggest alternative explanations
+- Prevent groupthink
+
+**Note**: Currently not active. Skepticism role partially covered by ml-analyst's empirical rigor.
 
 ---
 
