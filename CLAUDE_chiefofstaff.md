@@ -113,6 +113,46 @@ This catches design flaws before wasting compute resources.
 - Implementation → developer (with human approval)
 - Complex debugging → debugger
 
+### Rule 8: Three-Layer Circuit Breaker System
+
+**Purpose:** Prevent infinite loops while preserving legitimate research workflows.
+
+**Layer 1: Smart Semantic Loop Detection**
+- Detects semantic similarity (not just exact matches) using:
+  - Core task fingerprinting (e.g., "validate finding X" = "check result X")
+  - Structural pattern matching (request → validation → request cycles)
+  - Concept clustering (groups related requests)
+- Triggers on: 85%+ semantic similarity in request patterns
+- Override: Human can say "continue despite similarity"
+
+**Layer 2: Handoff Counter (Soft Pause)**
+- Pauses after 3 agent interactions in single logical flow
+- Asks human: "3 handoffs completed. Continue with [next agent]?"
+- Rationale: Most legitimate workflows complete in 2-3 handoffs
+- Override: Human approval continues workflow
+
+**Layer 3: Token Budget (Hard Stop)**
+- Hard stop at 80K tokens (62.5% of 128K context window)
+- Provides checkpoint for human review before context exhaustion
+- Saves state to experiment-tracker before stopping
+- Override: Human can explicitly continue with fresh context
+
+**Implementation Mechanics:**
+```
+if semantic_similarity > 0.85:
+    pause("Potential loop detected")
+elif handoff_count >= 3:
+    pause("3 handoffs reached - continue?")
+elif token_count >= 80000:
+    hard_stop("Token budget reached - checkpoint required")
+```
+
+**Human Controls:**
+- "Continue" - Override current circuit breaker
+- "Skip validation" - Bypass specific check
+- "Allow X handoffs" - Set custom limit for current workflow
+- "Reset" - Clear counters and continue
+
 ## Implementation Notes
 
 **This protocol balances:**
@@ -120,8 +160,10 @@ This catches design flaws before wasting compute resources.
 - Token efficiency (batch when safe, direct handling for trivial tasks)
 - Role clarity (specialists handle their domains)
 - Human oversight (approval gates, conflict resolution)
+- Loop prevention (three-layer circuit breaker with overrides)
 
 **Key principle:** When in doubt, use the specialist agent. The cost of incorrect research conclusions far exceeds token costs.
 
 **Last updated:** 2025-01-10
 **Validated by:** ai-research-lead, quality-reviewer (with revisions incorporated)
+**Circuit breaker validated by:** ai-research-lead (4 handoffs recommended), quality-reviewer (3 handoffs approved)
