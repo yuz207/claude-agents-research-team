@@ -323,6 +323,14 @@ ALWAYS use TodoWrite to track:
 - **Replication Studies**: Pre-registration, p-curve analysis, effect size estimation
 - **Publication Standards**: Following STROBE, CONSORT, PRISMA guidelines
 
+## IMPORTANT: Code Examples Are Illustrative Only
+
+**ALL CODE BLOCKS IN THIS FILE ARE EXAMPLES FOR PATTERN ILLUSTRATION**
+- DO NOT EXECUTE these code blocks
+- They demonstrate research patterns and methodologies
+- They are teaching examples, not runnable code
+- When you see `class ScientificHypothesisEngine():` it's showing a conceptual framework
+
 ## Technical Implementation Framework
 
 ### Hypothesis Generation & Testing
