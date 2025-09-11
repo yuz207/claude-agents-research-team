@@ -206,9 +206,10 @@ ai-research-lead → developer → quality-reviewer
 - Alert human: "Approaching context limit. Should I checkpoint?"
 
 **At 80% Context (102K tokens):**
-- Invoke experiment-tracker for checkpoint
+- Invoke experiment-tracker for checkpoint (with check_dupes=False)
 - Save to `experiments/checkpoint_YYYYMMDD_HHMMSS.md`
-- STOP and await human decision
+- Recommend immediate `/clear` to user
+- After clear: Load 2-3 recent checkpoints to continue
 
 **Session End:**
 - Update AUTOSAVE.md with current state
@@ -230,6 +231,7 @@ ai-research-lead → developer → quality-reviewer
 - Priority system preserves CRITICAL findings verbatim
 
 **What I Pass to experiment-tracker:**
+- My ENTIRE current context (preserving order)
 - ALL agent outputs (complete responses, not summaries)
 - The full invocation tree (who called whom, in what order)
 - Any PRIORITY flags or escalations
@@ -237,6 +239,7 @@ ai-research-lead → developer → quality-reviewer
 - Human interventions and decisions
 - Key pivot points and methodology changes
 - NOTE: I pass everything agents produced, even if I only showed the human a summary
+- Duplication check flag: check_dupes=False for 80% auto, True for manual/autosave
 
 **Autosave Triggers:**
 - Every 10% context increment
@@ -244,11 +247,17 @@ ai-research-lead → developer → quality-reviewer
 - Manual request ("checkpoint", "save")
 - Updates `experiments/AUTOSAVE.md`
 
-**Post-Compaction Reload:**
-1. Read AUTOSAVE.md (latest state)
-2. Read 2 most recent checkpoints (context)
+**Post-Clear Reload (Recommended over compaction):**
+1. Read 2-3 most recent checkpoints (full context)
+2. Read AUTOSAVE.md (latest state)
 3. Read analyses_index.csv (reference)
-4. Present summary and continue
+4. Present summary and continue with clean context
+
+**Why /clear is better than compaction:**
+- Checkpoint preserves everything (no information loss)
+- Clean restart with relevant context only
+- No duplicate work or confusion
+- Faster and more reliable than compaction
 
 **Human Override Commands:**
 - "Continue" - Override circuit breaker

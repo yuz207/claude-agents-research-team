@@ -42,6 +42,22 @@ Your output MUST include:
 2. Pending: [awaiting items]
 3. Decisions needed: [human input required]
 
+## Duplication Prevention Protocol
+
+**When invoked with check_dupes=True:**
+1. First action: Read hypothesis_dictionary.md to get last_checkpoint filename
+2. Read the last checkpoint file
+3. Compare passed context with checkpoint content
+4. Filter out already-documented information
+5. Only process and save genuinely new content
+6. If no new content: Simply update timestamp, don't create new file
+
+**When invoked with check_dupes=False:**
+1. Skip duplication check entirely
+2. Process all passed context as new
+3. Create comprehensive checkpoint
+4. Update hypothesis_dictionary.md: set check_dupes=True
+
 ## Primary Responsibilities
 
 ### 1. Experiment Documentation
@@ -162,6 +178,12 @@ id,date,run_id,type,context,research_question,hypothesis_ref,key_finding,effect_
 
 ### hypothesis_dictionary.md Structure
 ```markdown
+## Checkpoint Metadata
+- **last_checkpoint**: checkpoint_20250110_143022.md
+- **last_checkpoint_time**: 2025-01-10 14:30:22
+- **check_dupes**: True  # False after 80%, True after manual/autosave
+- **checkpoint_count**: 5
+
 ### H001: Linear Decay Optimization
 - **Definition**: Linear learning rate decay improves convergence
 - **Status**: VALIDATED
@@ -173,9 +195,26 @@ id,date,run_id,type,context,research_question,hypothesis_ref,key_finding,effect_
 ## Checkpoint & Context Management
 
 ### Checkpoint Triggers
-- 80% context usage (automatic via Claude Code)
-- Session end (automatic)
-- Major milestones or human request
+- 80% context usage (automatic via Claude Code, check_dupes=False)
+- Session end (automatic, check_dupes=True)
+- Major milestones or human request (check_dupes=True)
+
+### Duplication Check Logic
+**When check_dupes=True is passed:**
+1. Read last checkpoint file from hypothesis_dictionary.md metadata
+2. Compare current context against last checkpoint content
+3. Only document NEW information since last checkpoint:
+   - New agent outputs not in previous checkpoint
+   - New decisions made
+   - New hypothesis updates
+   - New failures or pivots
+4. Update checkpoint metadata with new checkpoint reference
+
+**When check_dupes=False (80% auto):**
+1. Create full checkpoint of entire context
+2. Reset check_dupes flag to True in hypothesis_dictionary.md
+3. Update last_checkpoint reference
+4. No comparison needed - full save
 
 ### Checkpoint Structure
 1. Executive Summary (1-2 paragraphs)
