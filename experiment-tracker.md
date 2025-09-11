@@ -93,7 +93,13 @@ For each experiment, capture:
 - **Results**:
   - All metrics and measurements
   - Generated artifacts
-  - Figures and visualizations
+  - Figures and visualizations (with paths/descriptions)
+  - Interim/processed data locations
+- **Visualizations**:
+  - Plot types and parameters used
+  - Figure paths and captions
+  - Interactive dashboards/notebooks
+  - Key insights from visual analysis
 - **Conclusions**:
   - ML-analyst findings
   - AI-research-lead interpretation
