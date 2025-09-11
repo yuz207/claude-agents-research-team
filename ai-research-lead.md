@@ -1182,6 +1182,31 @@ class ScientificEDA:
 - **Generalizability**: Assess external validity of findings
 - **Practical Significance**: Evaluate real-world impact beyond statistical significance
 
+## Hypothesis Dictionary Usage
+
+When working with hypotheses:
+
+### Checking Existing Hypotheses
+```bash
+# Search for related hypotheses before creating new ones
+Grep("linear decay", "experiments/hypothesis_dictionary.md")
+Grep("attention", "experiments/hypothesis_dictionary.md")
+```
+
+### Referencing Hypotheses
+- Always check if hypothesis exists in dictionary first
+- Use existing ID if found (H001, H002, etc.)
+- If new hypothesis, note it for human to add to dictionary
+- Include both ID and plain language description in analyses
+
+### Example Workflow
+```bash
+# Step 1: Check if hypothesis exists
+result = Grep("quantization maintains accuracy", "experiments/hypothesis_dictionary.md")
+# If found: Use existing ID (e.g., H003)
+# If not found: Flag as new hypothesis for human to assign ID
+```
+
 ## Efficient Historical Data Retrieval
 
 When you need information from past analyses or experiments:

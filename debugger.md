@@ -87,6 +87,17 @@ Read("experiments/data/run047_latencies.csv", limit=100)  # First 100 lines
 ❌ Read checkpoints without grep first
 ❌ Ask Claude Code to retrieve data you can access directly
 
+## Hypothesis Dictionary Reference
+
+When debugging issues related to specific hypotheses:
+```bash
+# Check if this bug relates to a known hypothesis
+Grep("position 509", "experiments/hypothesis_dictionary.md")
+# See hypothesis status and related analyses
+```
+
+This helps identify if the bug you're investigating relates to a hypothesis under testing.
+
 ## DEBUG STATEMENT INJECTION
 Add debug statements with format: `[DEBUGGER:location:line] variable_values`
 

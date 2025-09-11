@@ -58,6 +58,33 @@ ALWAYS check CLAUDE.md for:
 - Visualization standards
 - Analysis tool preferences
 
+## Hypothesis Dictionary Usage
+
+When validating hypotheses:
+
+### Looking Up Hypothesis Details
+```bash
+# Find hypothesis definition and current status
+Read("experiments/hypothesis_dictionary.md")
+# Or search for specific hypothesis
+Grep("H001", "experiments/hypothesis_dictionary.md")
+```
+
+### Updating Evidence Levels
+When your validation changes hypothesis status:
+- Note current evidence level from dictionary
+- Report new evidence with statistical details
+- Recommend status change if warranted (TESTING → CONFIRMED/REJECTED)
+- Human will update dictionary based on your validation
+
+### Example Validation Report
+```markdown
+Hypothesis H001 Validation:
+- Current Status: TESTING
+- New Evidence: p=0.003, effect_size=0.72, CI=[0.51, 0.93]
+- Recommendation: Update to CONFIRMED (meets p<0.01, effect>0.5 criteria)
+```
+
 ## Efficient Historical Data Retrieval
 
 When you need information from past analyses or experiments:

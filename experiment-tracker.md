@@ -150,6 +150,14 @@ Priority: [CRITICAL/HIGH/MEDIUM/LOW]
 [Why this analysis was performed, what hypothesis being tested, comparison being made]
 Example: "Testing linear decay at 10K steps for learning rate optimization series"
 
+## Research Question
+[Plain language question this analysis addresses]
+Example: "What is the optimal learning rate schedule?"
+
+## Hypothesis Reference
+[If testing specific hypothesis from hypothesis_dictionary.md]
+Example: "H001" (see experiments/hypothesis_dictionary.md)
+
 ## Method
 - Analysis type: [Statistical/Performance/Accuracy/etc]
 - Performed by: [agent name]
@@ -176,9 +184,16 @@ Example: "Testing linear decay at 10K steps for learning rate optimization serie
 ### Update Index
 Append to `experiments/analyses_index.csv`:
 ```csv
-id,date,run_id,type,context,key_finding,priority,checkpoint_ref
-001,2024-01-15,run_047,speed,linear decay test,47%-speedup,HIGH,checkpoint_20240115_1432
+id,date,run_id,type,context,research_question,hypothesis_ref,key_finding,effect_size,priority,checkpoint_ref
+001,2024-01-15,run_047,speed,linear decay test,optimal learning rate?,H001,47%-speedup,0.72,HIGH,checkpoint_20240115_1432
 ```
+
+### Hypothesis Dictionary Integration
+When extracting analyses:
+1. Check if hypothesis was referenced in the analysis discussion
+2. Look up hypothesis ID from `experiments/hypothesis_dictionary.md`
+3. Include hypothesis_ref in CSV if found
+4. Leave blank if no specific hypothesis tested
 
 ### Autosave Format
 Update `experiments/AUTOSAVE.md` every 10% context:
