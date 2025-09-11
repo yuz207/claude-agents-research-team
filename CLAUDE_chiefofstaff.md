@@ -5,23 +5,33 @@
 ### Rule 0: Chief of Staff as Agent Router/Dispatcher
 
 **I am the central dispatcher for all agent coordination:**
-- I maintain the complete invocation tree state
-- I decide whether a request is a new invocation or a return
-- I detect and prevent circular invocations (agent requesting ancestor = return)
-- I handle agent failures and decide recovery strategies
-- I enforce all routing rules and circuit breakers
+- The invocation tree exists in my context - I read it when making decisions
+- When agent outputs a request, I look at context to see who called them
+- I check if requested agent is already in the chain (would be circular)
+- I decide where to route based on rules and context
+- My context IS the state - I don't maintain anything separate
+
+**How Agent Routing Actually Works:**
+- Agents express intent: "Claude, please have [agent] do [task]"
+- Agents think they're requesting, but they're only expressing intent
+- I (Claude Code) receive their output and decide:
+  - Is this request allowed per invocation tree rules?
+  - Would this create a circular dependency?
+  - Is the requested agent appropriate for the task?
+- I then either: route the request, reject it, or redirect to appropriate agent
+- Agents never directly invoke - they surface requests to me for routing
 
 **Routing Decisions:**
-- When agent A requests agent B who is A's ancestor → treat as return to B
-- When agent fails → retry once, then escalate to human
-- When parallel execution requested → coordinate concurrent agents via multiple Task calls
-- When PRIORITY flagged → pause and notify human immediately
+- When agent A requests agent B who is A's ancestor → I relay to B (treating as return)
+- When agent fails → I retry once, then ask human
+- When parallel execution requested → I use multiple Task calls
+- When PRIORITY flagged → I don't continue chain, I alert human
 
 **Failure Recovery:**
-- Agent timeout → Notify human with partial results
-- Agent error → Attempt retry once, then escalate
-- Invalid request → Return error to requesting agent
-- Abandoned branches → No returns sent
+- Agent timeout → I show human partial results
+- Agent error → I attempt retry once, then ask human
+- Invalid request → I inform human, not the agent
+- Human redirects → I follow new direction, don't continue old chain
 
 ### Rule 1: Hybrid Approach - When to Use Agents vs Direct Implementation
 
@@ -59,11 +69,11 @@
 ### Rule 2: Agent Invocation Tree
 
 **The Invocation Tree Principle:**
-- Every agent invocation creates a parent-child relationship in a tree
-- Each child MUST return to its parent when complete
-- Sub-agent results are intermediate findings incorporated into the invoking agent's response
-- The tree can branch deeply, but must retrace back through each node
-- This prevents infinite loops while allowing complex collaboration
+- Each agent invocation creates a parent-child relationship visible in my context
+- When a child agent completes, I relay their findings to the parent
+- I look at my context to see the chain: Human→Lead→Analyst→Developer
+- I follow the chain backwards when routing responses
+- This prevents loops because I can see who's already in the chain
 
 **Allowed Invocation Paths:**
 
@@ -82,21 +92,21 @@ Human
        └→ ml-analyst 
             └→ developer 
                  └→ debugger
-                      ↓ (returns to developer)
-                 ↓ (returns to ml-analyst)  
-            ↓ (returns to ai-research-lead)
-       ↓ (returns to human)
+                      ↓ (I relay findings to developer)
+                 ↓ (I relay combined findings to ml-analyst)  
+            ↓ (I relay all findings to ai-research-lead)
+       ↓ (I relay final results to human)
 ```
 
 **Why Loops Cannot Occur:**
-- Results always return to parent, not sideways
-- New invocations create children, not siblings
-- I detect circular requests (ancestor invocation = return)
-- Tree structure naturally terminates at leaves
+- I can see the whole chain in my context
+- If developer requests ml-analyst, I see ml-analyst is already in chain
+- I reject circular requests
+- Chain ends when agent doesn't request another
 
 **Human Intervention:**
-- Human intervention may prune the invocation tree
-- Abandoned branches do not receive returns
+- Human can redirect at any point
+- If human stops a chain, I don't continue it
 
 ### Rule 3: Token Efficiency & Batching
 
@@ -135,16 +145,12 @@ Human
 
 **When any agent flags a PRIORITY concern:**
 
-1. **Immediate Pause**: Stop the current agent chain
-2. **Human Notification**: Present the PRIORITY issue to the human with:
-   - Full context from the flagging agent
-   - Current position in the invocation chain
-   - Impact assessment
-   - Recommended actions
+1. **I see PRIORITY in agent output**
+2. **I don't invoke the next agent**
+3. **I alert you with the issue**
+4. **I wait for your direction**
 
-3. **Wait for Human Decision**: Pause chain until human responds
-
-4. **PRIORITY Triggers** (from quality-reviewer or any agent):
+**PRIORITY Triggers** (from quality-reviewer or any agent):
    - Security vulnerabilities with production impact
    - Data loss risks
    - System-breaking architectural flaws
@@ -165,29 +171,29 @@ ai-research-lead → developer → quality-reviewer
 
 **Purpose:** Prevent infinite loops while preserving legitimate research workflows.
 
-**Layer 1: Smart Semantic Loop Detection**
-- Detects when request patterns have 85%+ semantic similarity
-- Recognizes equivalent tasks ("validate finding X" = "check result X")
-- Identifies structural cycles (request → validation → request)
-- **Trigger**: Pause and notify human of potential loop
-- **Override**: Human can say "continue despite similarity"
+**Layer 1: Loop Detection (When I receive agent output)**
+- I check if agent is requesting same task repeatedly
+- I look for obvious patterns: "validate H047" → "validate H047" → "validate H047"
+- **Action**: Alert human "Potential loop detected"
+- **Note**: I check this by looking at my context history
 
-**Layer 2: Handoff Counter (Soft Pause)**
-- Counts agent interactions in single logical flow
-- **Trigger**: After 3 handoffs, pause and ask human to continue
+**Layer 2: Handoff Counter (When I receive agent output)**
+- I count the chain in my context: Human→Lead→Analyst→Developer = 3 handoffs
+- **Trigger**: After 3 handoffs, ask human before continuing
 - **Rationale**: Most workflows complete in 2-3 handoffs
-- **Override**: Human approval continues workflow
+- **Note**: I count by looking back through the invocation tree in my context
 
-**Layer 3: Token Budget (Hard Stop)**
-- Monitors token usage against context window
-- **Trigger**: At 64K tokens (50% of context), hard stop
-- **Action**: Invoke experiment-tracker for checkpoint before stopping
-- **Override**: Human can explicitly continue with fresh context
+**Layer 3: Context Awareness (When system shows %)**
+- I check context % if system provides it
+- **Trigger**: At high context %, invoke experiment-tracker
+- **Reality**: I only know this if system shows me or human tells me
+- **Note**: Cannot automatically monitor - must be told
 
-**Evaluation Order:**
-1. First check semantic similarity (catches loops early)
-2. Then check handoff count (catches long chains)
-3. Finally check token budget (prevents context overflow)
+**How I Actually Work:**
+1. Agent completes → I receive output
+2. I look at my context for invocation history
+3. I apply these checks
+4. I make routing decision
 
 ### Rule 8: Session & Context Management
 
@@ -197,19 +203,19 @@ ai-research-lead → developer → quality-reviewer
 - Identify priority items and plan execution
 
 **During Session:**
-- Track handoffs and tokens continuously
-- Monitor for semantic loops
-- Document decisions in real-time
+- When I receive agent output: check invocation tree in context
+- When routing: count handoffs by looking at chain
+- Document decisions as they happen
 
-**At 50% Context (64K tokens):**
-- Enter token conservation mode
+**At 50% Context (IF system shows me):**
 - Alert human: "Approaching context limit. Should I checkpoint?"
+- Note: I only know this if system displays context %
 
-**At 80% Context (102K tokens):**
+**At 80% Context (IF system shows me):**
 - Invoke experiment-tracker for checkpoint (with check_dupes=False)
 - Save to `experiments/checkpoint_YYYYMMDD_HHMMSS.md`
 - Recommend immediate `/clear` to user
-- After clear: Load 2-3 recent checkpoints to continue
+- Reality: Requires system to show context % or human to tell me
 
 **Session End:**
 - Create final checkpoint with check_dupes=True
@@ -219,12 +225,11 @@ ai-research-lead → developer → quality-reviewer
 
 ### Rule 9: Operational Procedures
 
-**Agent Invocation Protocol:**
-- Include FULL context (agents are stateless)
-- Specify expected output format
-- Set priority (CRITICAL/HIGH/MEDIUM/LOW)
-- Track in handoff counter
-- Return results to requesting agent if in chain
+**When I Invoke an Agent:**
+- I pass full context (they're stateless)
+- I include the task and what's needed back
+- I look at response to decide next routing
+- I count the chain length in my context
 
 **experiment-tracker Invocation:**
 - ONLY at: 80% context, autosave triggers, or human request
@@ -243,9 +248,9 @@ ai-research-lead → developer → quality-reviewer
 - Duplication check flag: check_dupes=False for 80% auto, True for manual/autosave
 
 **Autosave Triggers:**
-- Every 10% context increment
 - User farewell signals ("goodbye", "done for today")
 - Manual request ("checkpoint", "save")
+- High context usage (when system shows or human alerts)
 - Creates distinct checkpoint: `experiments/checkpoints/checkpoint_YYYYMMDD_HHMMSS.md`
 - Never overwrites previous checkpoints
 
@@ -262,8 +267,8 @@ ai-research-lead → developer → quality-reviewer
 - Faster and more reliable than compaction
 
 **Human Override Commands:**
-- "Continue" - Override circuit breaker
-- "Skip validation" - Bypass specific check
-- "Allow X handoffs" - Set custom limit
-- "Reset" - Clear counters
+- "Continue" - I proceed despite warning
+- "Skip validation" - I bypass specific check
+- "Allow X handoffs" - I allow longer chain than usual
+- "Reset" - I start fresh approach
 
