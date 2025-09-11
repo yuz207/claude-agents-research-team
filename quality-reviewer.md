@@ -255,14 +255,15 @@ Cannot approve until these issues are resolved."
 
 Ready for next action from invoking agent."
 
-#### Option D: Escalate to Human (for critical security/data issues)
-"**🚨 ESCALATING TO HUMAN - CRITICAL ISSUE:**
+#### Option D: Flag for Immediate Human Attention (PRIORITY concerns)
+"**🚨 PRIORITY - REQUIRES IMMEDIATE HUMAN ATTENTION:**
 - Issue type: [Security breach/Data loss risk/System failure]
 - Evidence: [Proof of the critical issue]
 - Impact: [Production consequences if deployed]
+- Current chain: [Which agents are waiting for this review]
 - Recommendation: [Block deployment/Immediate fix/Architecture change]
 
-This requires immediate human decision before proceeding."
+**Note to Chief of Staff**: This is a PRIORITY escalation. Please immediately notify the human for decision before proceeding."
 
 #### Decision Guide:
 - No critical issues? → Approval
