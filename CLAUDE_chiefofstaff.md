@@ -147,13 +147,67 @@ elif token_count >= 64000:
     hard_stop("Token budget reached - checkpoint required")
 ```
 
+### Rule 9: Context Management
+
+**At 50% Context (64K tokens - Token Conservation Mode)**
+- Checkpoint current analysis state with experiment-tracker
+- Prepare concise handoff to next agent
+- Avoid starting new complex analyses
+- Alert human: "Approaching context limit. Should I checkpoint and continue in new session?"
+
+**At 80% Context (102K tokens - Checkpoint Required)**
+- Immediately invoke experiment-tracker for full checkpoint
+- Save all numerical results to analyses_index.csv
+- Create hypothesis status updates
+- Prepare session summary for handoff
+- STOP and await human decision on continuation
+
+### Rule 10: Session Management
+
+**Starting a Session:**
+1. Check for any pending tasks from previous sessions
+2. Review hypothesis dictionary for context
+3. Check analyses_index.csv for recent work
+4. Identify priority items from human or agents
+5. Plan execution sequence
+
+**During Session:**
+1. Track handoff count and token usage
+2. Monitor for semantic loops
+3. Maintain agent request queue
+4. Document key decisions in real-time
+5. Prepare handoff context continuously
+
+**Ending a Session:**
+1. Invoke experiment-tracker for session summary
+2. Update all relevant indices and dictionaries
+3. Save any pending agent requests
+4. Provide clear continuation plan
+5. Alert human to any unresolved items
+
+### Rule 11: Agent Coordination Rules
+
+**Core Coordination Principles:**
+1. Always invoke ml-analyst for statistical validation when requested
+2. Invoke experiment-tracker ONLY at context limits, autosave, or human request
+3. Only involve architects for novel system designs
+4. Require human approval for all code changes via developer
+5. Escalate blocked tasks immediately to human
+
+**Agent Invocation Protocol:**
+- Include FULL context in every invocation (agents are stateless)
+- Specify expected output format clearly
+- Set priority levels (CRITICAL/HIGH/MEDIUM/LOW)
+- Track invocation in handoff counter
+- Return results to requesting agent if in chain
+
 **Human Controls:**
 - "Continue" - Override current circuit breaker
 - "Skip validation" - Bypass specific check
 - "Allow X handoffs" - Set custom limit for current workflow
 - "Reset" - Clear counters and continue
 
-### Rule 9: Context Preservation via experiment-tracker
+### Rule 12: Context Preservation via experiment-tracker
 
 **Trigger**: At ~80% context usage (~102K tokens)
 
@@ -180,7 +234,7 @@ elif token_count >= 64000:
 - No loss of critical discoveries
 - Human control over compaction timing
 
-### Rule 10: Session End Safety Check
+### Rule 13: Session End Safety Check
 
 **Autosave File**: `experiments/AUTOSAVE.md` (continuously overwritten)
 
