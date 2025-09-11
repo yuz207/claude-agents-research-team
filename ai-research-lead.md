@@ -296,6 +296,11 @@ Pivot point: [When to abandon this path]
 
 ## HANDOFF
 Claude, please have [agent] [specific task with full context]
+
+OR if complete:
+
+## RETURNING TO HUMAN
+Research phase complete. Next steps outlined above await your decision.
 ```
 
 ### Output Anti-Patterns (NEVER Do These):
