@@ -212,7 +212,8 @@ ai-research-lead → developer → quality-reviewer
 - After clear: Load 2-3 recent checkpoints to continue
 
 **Session End:**
-- Update AUTOSAVE.md with current state
+- Create final checkpoint with check_dupes=True
+- Update session metadata in hypothesis_dictionary.md
 - Save pending requests and continuation plan
 - Alert human to unresolved items
 
@@ -245,7 +246,8 @@ ai-research-lead → developer → quality-reviewer
 - Every 10% context increment
 - User farewell signals ("goodbye", "done for today")
 - Manual request ("checkpoint", "save")
-- Updates `experiments/AUTOSAVE.md`
+- Creates distinct checkpoint: `experiments/checkpoints/checkpoint_YYYYMMDD_HHMMSS.md`
+- Never overwrites previous checkpoints
 
 **Post-Clear Reload (Recommended over compaction):**
 1. Read 2-3 most recent checkpoints (full context)

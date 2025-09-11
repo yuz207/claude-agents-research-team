@@ -44,19 +44,28 @@ Your output MUST include:
 
 ## Duplication Prevention Protocol
 
-**When invoked with check_dupes=True:**
-1. First action: Read hypothesis_dictionary.md to get last_checkpoint filename
-2. Read the last checkpoint file
-3. Compare passed context with checkpoint content
-4. Filter out already-documented information
-5. Only process and save genuinely new content
-6. If no new content: Simply update timestamp, don't create new file
+**When invoked with check_dupes=True AND context < 70%:**
+1. First action: Read hypothesis_dictionary.md to get last_checkpoint_hash
+2. Generate SHA-256 hash of current context
+3. If hashes match: Skip save, only update timestamp
+4. If hashes differ: Create incremental checkpoint with new content only
+5. Update metadata with new hash and checkpoint reference
 
-**When invoked with check_dupes=False:**
-1. Skip duplication check entirely
-2. Process all passed context as new
-3. Create comprehensive checkpoint
-4. Update hypothesis_dictionary.md: set check_dupes=True
+**When invoked with check_dupes=True AND context >= 70%:**
+1. Skip comparison (too expensive at high context)
+2. Create full checkpoint (comparison cost exceeds storage cost)
+3. Update metadata with new hash
+
+**When invoked with check_dupes=False (80% auto-save):**
+1. Skip all duplication checks
+2. Create full comprehensive checkpoint
+3. Update hypothesis_dictionary.md: set check_dupes=True
+4. Store content hash for future comparisons
+
+**After /clear detected:**
+1. Reset check_dupes to False
+2. Clear last_checkpoint_hash
+3. Note session boundary in metadata
 
 ## Primary Responsibilities
 
@@ -157,12 +166,16 @@ When creating checkpoints, preserve:
 ### Directory Structure
 ```
 experiments/
-├── hypothesis_dictionary.md         # All hypotheses with status
+├── hypothesis_dictionary.md         # All hypotheses with status + checkpoint metadata
 ├── analyses_index.csv              # Master index of all analyses
-├── checkpoints/                    # Session checkpoints (YYYYMMDD_HHMMSS.md)
+├── checkpoints/                    # ALL checkpoints - never overwritten
+│   ├── checkpoint_20250110_143022.md  # 80% auto-save
+│   ├── checkpoint_20250110_145530.md  # Manual save
+│   └── checkpoint_20250110_150000.md  # Autosave trigger
 ├── by_date/YYYY-MM-DD/            # Daily analysis and decision records
 ├── data/                          # Raw, processed, and manifest files
-└── AUTOSAVE.md                    # Current session state
+└── sessions/                      # Session boundaries and continuity
+    └── session_20250110_140000.md # Session start/end markers
 ```
 
 ### Naming Conventions
@@ -181,8 +194,10 @@ id,date,run_id,type,context,research_question,hypothesis_ref,key_finding,effect_
 ## Checkpoint Metadata
 - **last_checkpoint**: checkpoint_20250110_143022.md
 - **last_checkpoint_time**: 2025-01-10 14:30:22
+- **last_checkpoint_hash**: a7b9c2d4e6f8...  # SHA-256 of content
 - **check_dupes**: True  # False after 80%, True after manual/autosave
 - **checkpoint_count**: 5
+- **session_id**: session_20250110_140000  # Changes after /clear
 
 ### H001: Linear Decay Optimization
 - **Definition**: Linear learning rate decay improves convergence
