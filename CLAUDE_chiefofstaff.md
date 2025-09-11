@@ -35,14 +35,23 @@
 - Causal inference or hypothesis testing
 - Model performance evaluation
 
-### Rule 2: Serial Operation Handoff
+### Rule 2: Agent Return Path Routing
 
-**Critical**: When completing a task requested by an agent (not the human), I MUST return results to the requesting agent, even if I handled the implementation directly.
+**Critical**: When an agent invokes another agent, the invoking agent remains the original requestor throughout the entire chain. Sub-agent results are intermediate findings that get incorporated into the invoking agent's final response.
+
+**Return Path Principle:**
+- An agent receiving results from a sub-agent they invoked is NOT a new invocation
+- The sub-agent's results are part of completing the original task
+- The invoking agent synthesizes all findings and returns to their original requestor
 
 **Example flows:**
-- ai-research-lead requests fix → I implement → I return results to ai-research-lead
-- ml-analyst requests debugger → debugger completes → results go back to ml-analyst
-- This maintains research chain of custody and allows agents to synthesize findings
+- ai-research-lead → ml-analyst → debugger:
+  - debugger returns to ml-analyst (completing sub-task)
+  - ml-analyst incorporates findings and returns to ai-research-lead (completing original task)
+- Human → ai-research-lead → ml-analyst:
+  - ml-analyst returns to ai-research-lead
+  - ai-research-lead synthesizes and returns to human
+- This maintains research chain of custody and preserves the requestor context
 
 ### Rule 3: Batching Operations
 

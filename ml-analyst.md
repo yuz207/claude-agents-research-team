@@ -164,7 +164,9 @@ Read("experiments/data/run047_latencies.csv", limit=100)  # First 100 lines
 - Files to check: model.py lines 234-267
 - Need: Root cause analysis"
 
-**Note**: Experiment-tracker is invoked automatically by Claude Code. Do NOT request manually.
+**Note**: 
+- Experiment-tracker is invoked automatically by Claude Code. Do NOT request manually.
+- Implementation requests should go through ai-research-lead for approval.
 
 ### Always Provide FULL Context
 - Include actual data, not descriptions
