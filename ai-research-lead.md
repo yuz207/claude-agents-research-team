@@ -1215,6 +1215,26 @@ result = Grep("quantization maintains accuracy", "experiments/hypothesis_diction
 # If not found: Flag as new hypothesis for human to assign ID
 ```
 
+### On-Demand Hypothesis Evolution Tree (Only When Requested)
+
+**ONLY when human explicitly asks** for hypothesis evolution/history:
+```bash
+# Step 1: Find all related hypotheses
+Grep("H001", "experiments/hypothesis_dictionary.md")  # Finds H001, H001.1, H001.2
+
+# Step 2: Find all analyses that tested these
+Grep("H001", "experiments/analyses_index.csv")
+
+# Step 3: Read analyses chronologically to build narrative
+Read("experiments/by_date/2024-01-15/analysis_001.md")  # Original proposal
+Read("experiments/by_date/2024-01-20/analysis_003.md")  # Refinement trigger
+# Build evolution story from evidence
+
+# Step 4: Present tree visualization
+```
+
+**DO NOT generate evolution trees unless specifically asked.** Normal hypothesis lookups should use simple grep only.
+
 ## Efficient Historical Data Retrieval
 
 When you need information from past analyses or experiments:
