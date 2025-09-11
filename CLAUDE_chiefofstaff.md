@@ -229,6 +229,15 @@ ai-research-lead → developer → quality-reviewer
 - Creates checkpoint at `experiments/checkpoint_YYYYMMDD_HHMMSS.md`
 - Priority system preserves CRITICAL findings verbatim
 
+**What I Pass to experiment-tracker:**
+- ALL agent outputs (complete responses, not summaries)
+- The full invocation tree (who called whom, in what order)
+- Any PRIORITY flags or escalations
+- Failed attempts and retry outcomes
+- Human interventions and decisions
+- Key pivot points and methodology changes
+- NOTE: I pass everything agents produced, even if I only showed the human a summary
+
 **Autosave Triggers:**
 - Every 10% context increment
 - User farewell signals ("goodbye", "done for today")
