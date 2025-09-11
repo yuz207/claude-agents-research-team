@@ -164,9 +164,31 @@ Read("experiments/data/run047_latencies.csv", limit=100)  # First 100 lines
 - Files to check: model.py lines 234-267
 - Need: Root cause analysis"
 
+**Developer Request (for validation failures):**
+"Claude Code, please invoke developer with:
+- Issue: Test failing with assertion error
+- Location: tests/test_model.py line 45
+- Evidence: Expected 0.95, got 0.73
+- Suspected cause: Incorrect normalization
+- Need: Fix implementation to match specification"
+
+**Architect Request (for design flaws):**
+"Claude Code, please invoke architect with:
+- Design issue: Model architecture cannot handle variable-length sequences
+- Evidence: OOM errors on sequences >1024 despite config allowing 2048
+- Current design: Fixed positional encodings
+- Need: Architectural revision for dynamic handling"
+
+**Quality-Reviewer Request (for statistical code review):**
+"Claude Code, please invoke quality-reviewer with:
+- Code to review: statistical_tests.py
+- Concern: Ensure correct multiple comparison corrections
+- Context: Running 50 hypothesis tests simultaneously
+- Need: Verify statistical validity before publication"
+
 **Note**: 
 - Experiment-tracker is invoked automatically by Claude Code. Do NOT request manually.
-- Implementation requests should go through ai-research-lead for approval.
+- All results return to ml-analyst for synthesis before returning to original invoker.
 
 ### Always Provide FULL Context
 - Include actual data, not descriptions

@@ -180,6 +180,14 @@ Claude Code, please invoke debugger with:
 - **Reproduction steps**: [How to trigger the issue]
 - **Expected vs actual**: [What should happen vs what happens]
 - **Environment**: [Relevant system/dependency info]
+
+## Request for ML-Analyst (to validate implementation)
+Claude Code, please invoke ml-analyst with:
+- **Implementation complete**: [What was implemented]
+- **Validation needed**: [Statistical/performance validation required]
+- **Test data**: [Location of test datasets]
+- **Success criteria**: [Expected metrics and thresholds]
+- **Comparison baseline**: [Previous implementation to compare against]
 ```
 
 ### MANDATORY: How to End Your Response

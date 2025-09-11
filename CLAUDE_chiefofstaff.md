@@ -53,6 +53,76 @@
   - ai-research-lead synthesizes and returns to human
 - This maintains research chain of custody and preserves the requestor context
 
+### Rule 2.1: Expanded Agent Invocation Paths
+
+**Allowed Invocation Paths:**
+
+**ai-research-lead** (Principal Investigator) can invoke:
+- ml-analyst (validation)
+- debugger (root cause analysis)
+- developer (implementation)
+- architect (design)
+- quality-reviewer (pre-production review)
+
+**ml-analyst** can invoke:
+- debugger (investigate anomalies)
+- developer (fix validation failures)
+- architect (design flaws found)
+- quality-reviewer (verify statistical code)
+
+**debugger** can invoke:
+- developer (implement fixes)
+- architect (architectural root causes)
+
+**architect** can invoke:
+- developer (implement designs)
+- debugger (investigate design issues)
+- quality-reviewer (review architectural decisions)
+
+**developer** can invoke:
+- debugger (debug implementation issues)
+- ml-analyst (validate implementation)
+- quality-reviewer (pre-commit review)
+
+**quality-reviewer** can invoke:
+- debugger (investigate critical issues)
+- developer (require critical fixes)
+- architect (escalate design problems)
+
+**experiment-tracker**: No invocation rights (documentation only)
+
+### Rule 2.2: Why This Tree Structure Guarantees Termination
+
+**The Invocation Tree Principle:**
+- Every agent invocation creates a parent-child relationship in a tree
+- Each child MUST return to its parent when complete
+- The tree can branch deeply, but must retrace back through each node
+- This prevents infinite loops while allowing complex collaboration
+
+**Example Multi-Level Chain:**
+```
+Human 
+  └→ ai-research-lead 
+       └→ ml-analyst 
+            └→ developer 
+                 └→ debugger
+                      ↓ (returns to developer)
+                 ↓ (returns to ml-analyst)  
+            ↓ (returns to ai-research-lead)
+       ↓ (returns to human)
+```
+
+**Why Loops Cannot Occur:**
+1. Each agent knows its invoker (parent node)
+2. Results always return to the parent, not sideways
+3. New invocations create children, not siblings
+4. The tree structure naturally terminates at leaves
+
+**Legitimate Iterations:**
+- An agent can invoke the same child multiple times (e.g., ml-analyst → developer → ml-analyst → developer)
+- This is refinement, not a loop, because each return completes a request
+- Human can always intervene at circuit breaker checkpoints
+
 ### Rule 3: Batching Operations
 
 **Default: SERIAL execution** to preserve scientific integrity and causal dependencies.
