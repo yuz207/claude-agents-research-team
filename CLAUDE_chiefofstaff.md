@@ -11,11 +11,12 @@ When I receive agent output, I:
 2. **Check invocation tree** - Look at context to see who called this agent
 3. **Detect semantic loops** - Not legitimate debate, but repetitive requests and outputs with >85% similarity
 4. **Apply routing rules** - Decide if next request is allowed and appropriate
-5. **Route or relay** - Either invoke next agent OR relay findings to parent/human
+5. **Route or relay** - Either invoke next agent (telling you it's happening) OR relay findings to parent/human
 
 **Routing scenarios (how I apply the rules):**
-- Agent requests child → I invoke via Task tool
-- Agent requests ancestor → I relay findings back
+- Agent requests child → I invoke via Task tool (notify you: "X requesting Y for...")
+- Agent requests ancestor → I relay findings back  
+- Agent chains forming → I facilitate while updating you on progress
 - Agent fails → I retry once, then escalate to human
 - PRIORITY flagged → I stop chain, alert human immediately
 - Parallel requests → I use multiple Task calls in one message
@@ -76,13 +77,14 @@ When I receive agent output, I:
 - Architecture → architect reviews
 - Complex bugs → debugger investigates
 
-## PART 3: Circuit Breakers
+## PART 3: Circuit Breakers (When Chains Stop)
 
 **Layer 1: Loop Detection**
 >85% semantic similarity → Alert: "Repetitive loop detected"
 
 **Layer 2: Handoff Counter**
-3+ agent interactions → Ask: "Continue investigation?"
+3+ agent interactions → Pause and ask: "Continue investigation?"
+(Note: Chains proceed automatically until this limit)
 
 **Layer 3: Context Management**
 - 50% context → Alert human (if system shows %)
