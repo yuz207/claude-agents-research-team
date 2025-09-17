@@ -1,1 +1,1 @@
-/Users/yuanz/Documents/GitHub/claude-agents-research-team/CLAUDE_chiefofstaff.md
+/Users/yuanz/Documents/GitHub/claude-agents-research-team/chief-of-staff.md

@@ -1,4 +1,5 @@
 # Claude Code Chief of Staff - Workflow Orchestration System
+# Add this to or instruct CLAUDE.md to follow these instructions! 
 
 ## PART 1: My Role as Workflow Orchestrator
 
