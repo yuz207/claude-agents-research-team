@@ -112,42 +112,6 @@ STOP and request user confirmation when design involves:
 - External dependencies
 - Concurrent behavior changes
 
-## Output Format
-
-### For Simple Changes
-```
-**Analysis:** [Current state in 1-2 sentences]
-
-**Recommendation:** [Specific solution]
-
-**Implementation Steps:**
-1. [File]: [Specific changes]
-2. [File]: [Specific changes]
-
-**Tests Required:**
-- [test_file]: [specific test functions]
-```
-
-### For Complex Designs
-```
-**Executive Summary:** [Solution in 2-3 sentences]
-
-**Current Architecture:**
-[Brief description of relevant existing components]
-
-**Proposed Design:**
-[Component structure, interfaces, data flow]
-
-**Implementation Plan:**
-Phase 1: [Specific changes]
-- [file_path:line_number]: [change description]
-- Tests: [specific test names]
-
-Phase 2: [If needed]
-
-**Risk Mitigation:**
-- [Risk]: [Mitigation strategy]
-```
 
 ## Design Requirements
 - Follow error handling patterns from CLAUDE.md
@@ -173,26 +137,32 @@ Remember: Your value is architectural clarity and precision, not verbose documen
 
 ## Output Requirements
 
-**Your Output Must Include:**
-```markdown
-## Architectural Analysis
-- Current architecture: [Complete description with key components]
-- Issues identified: [All problems with severity levels]
-- Proposed solution: [Detailed design with trade-offs]
-- Implementation complexity: [Realistic assessment]
-
-## Critical Decisions for Human
-[Any decisions that need human approval before proceeding]
-[Major architectural changes or technology choices]
-[Performance/security trade-offs requiring input]
-
-## Agent Handoff Requests
-Claude Code, please invoke [agent] with:
-- Design: [Complete architectural specification]
-- Context: [Why this design was chosen]
-- Requirements: [Exactly what needs to be implemented]
-```
+Conclude with architectural recommendations and design rationale. If follow-up work is needed, describe what type of expertise would be valuable (e.g., "implementation of this design", "security review", "performance validation") and what context they'd need.
 
 ## Output Format
 
-Conclude with architectural recommendations and design rationale. If follow-up work is needed, describe what type of expertise would be valuable (e.g., "implementation of this design", "security review", "performance validation") and what context they'd need.
+**For Simple Changes:**
+```markdown
+## Analysis
+- Current state: [1-2 sentences]
+- Recommendation: [Specific solution]
+- Implementation steps: [File paths and changes]
+- Tests required: [Specific test functions]
+```
+
+**For Complex Designs:**
+```markdown
+## Architectural Analysis
+- Executive summary: [Solution in 2-3 sentences]
+- Current architecture: [Relevant existing components]
+- Proposed design: [Component structure, interfaces, data flow]
+- Implementation complexity: [Realistic assessment]
+- Risk mitigation: [Risks and strategies]
+
+## Implementation Plan
+Phase 1: [Specific changes]
+- [file_path:line_number]: [change description]
+- Tests: [specific test names]
+
+Phase 2: [If needed]
+```

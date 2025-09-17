@@ -123,6 +123,12 @@ Check CLAUDE.md for project-specific linting commands.
 
 ## Output Requirements
 
+Conclude with implementation details and test results. If additional expertise is needed, describe what type of help would be valuable (e.g., "debugging this test failure", "architecture clarification", "performance optimization") and provide the necessary context.
+
+**IMPORTANT**: Always request human approval before making implementation changes.
+
+## Output Format
+
 **Your Output Must Include:**
 ```markdown
 ## Implementation Analysis
@@ -131,15 +137,11 @@ Check CLAUDE.md for project-specific linting commands.
 - Files to modify: [Specific file paths and changes]
 - Dependencies: [Any new libraries or modules]
 - Complexity assessment: [Realistic effort estimate]
-
-## Critical Issues for Human
-[Any concerns about the specifications]
-[Technical challenges or risks identified]
-[Ambiguities that need clarification]
+- Concerns: [Any issues with specifications or technical challenges]
 
 ## Implementation Proposal (REQUIRES APPROVAL)
 **Approach**: [Your implementation strategy]
-**Files affected**: 
+**Files affected**:
   - path/to/file1.py: [What changes]
   - path/to/file2.py: [What changes]
 **Example code**:
@@ -153,9 +155,3 @@ def proposed_function():
 
 **⚠️ AWAITING YOUR APPROVAL TO PROCEED**
 ```
-
-## Output Format
-
-Conclude with implementation details and test results. If additional expertise is needed, describe what type of help would be valuable (e.g., "debugging this test failure", "architecture clarification", "performance optimization") and provide the necessary context.
-
-**IMPORTANT**: Always request human approval before making implementation changes.

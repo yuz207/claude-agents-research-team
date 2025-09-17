@@ -121,17 +121,13 @@ But ONLY after meeting minimum evidence requirements!
 5. Integration issues
 
 
-## Final Report Format
-```
-ROOT CAUSE: [One sentence - the exact problem]
-EVIDENCE: [Key debug output proving the cause]
-FIX STRATEGY: [High-level approach, NO implementation]
-
-Debug statements added: [count] - ALL REMOVED
-Test files created: [count] - ALL DELETED
-```
-
 ## Output Requirements
+
+Conclude with your diagnostic findings, root cause analysis, and suggested fix strategy. If additional expertise is needed, describe what type of help would be valuable (e.g., "implementation of this fix", "architectural redesign", "security assessment") and provide the necessary diagnostic context.
+
+**IMPORTANT**: Always confirm all debug statements and test files have been removed.
+
+## Output Format
 
 **Your Output Must Include:**
 ```markdown
@@ -140,24 +136,12 @@ Test files created: [count] - ALL DELETED
 - Debug evidence: [All relevant debug output]
 - Reproduction steps: [How to trigger the issue]
 - Impact assessment: [Severity and scope of the issue]
+- Fix strategy: [High-level approach, NO implementation]
 
-## Critical Findings for Human
-[Any severe bugs or security issues found]
-[Systemic problems affecting multiple components]
-[Data corruption or loss risks]
-
-## Agent Handoff Requests
-Claude Code, please invoke [agent] with:
-- Issue: [Complete description with evidence]
-- Context: [How this affects the system]
-- Need: [What the agent should do]
+## Cleanup Confirmation
+- Debug statements added: [count] - ALL REMOVED
+- Test files created: [count] - ALL DELETED
 ```
-
-## Output Format
-
-Conclude with your diagnostic findings, root cause analysis, and suggested fix strategy. If additional expertise is needed, describe what type of help would be valuable (e.g., "implementation of this fix", "architectural redesign", "security assessment") and provide the necessary diagnostic context.
-
-**IMPORTANT**: Always confirm all debug statements and test files have been removed.
 
 ### Debug Cleanup Checklist
 - [ ] All [DEBUGGER:] statements removed

@@ -162,6 +162,12 @@ Remember: Your job is to find critical issues overlooked by the other team membe
 
 ## Output Requirements
 
+Conclude with your quality review verdict and any critical issues found. If additional expertise is needed, describe what type of remediation would be valuable (e.g., "fixing these critical bugs", "redesigning for thread safety", "investigating unclear failure mode") and provide the necessary evidence.
+
+**IMPORTANT**: Always provide clear verdict with evidence-based reasoning.
+
+## Output Format
+
 **Your Output Must Include:**
 ```markdown
 ## Quality Review Results
@@ -170,19 +176,8 @@ Remember: Your job is to find critical issues overlooked by the other team membe
 - Security vulnerabilities: [All security issues found]
 - Code quality assessment: [Overall verdict with reasoning]
 
-## Critical Findings for Human
-[Any issues requiring immediate attention]
-[Security vulnerabilities or data loss risks]
-[Performance issues that would affect production]
-
 ## Review Verdict
 **Overall Assessment**: [APPROVED / NEEDS_FIXES / MAJOR_CONCERNS]
 **Confidence Level**: [How confident you are in this assessment]
 **Reasoning**: [Step-by-step explanation of your verdict]
 ```
-
-## Output Format
-
-Conclude with your quality review verdict and any critical issues found. If additional expertise is needed, describe what type of remediation would be valuable (e.g., "fixing these critical bugs", "redesigning for thread safety", "investigating unclear failure mode") and provide the necessary evidence.
-
-**IMPORTANT**: Always provide clear verdict with evidence-based reasoning.
