@@ -140,28 +140,53 @@
    [Recommendations based on findings]
    ```
 
-### Parallel Execution Rules
+### Parallel vs Sequential Execution
 
-**Parallel:** Use when tasks are independent (separate output files)
-**Sequential:** Use when tasks depend on previous outputs
+**Prefer parallel when possible for speed:**
+- Independent analysis needed (discovery phase)
+- Multiple aspects to check (security + performance + design)
+- Time is critical
+- No dependencies between agents
+
+**Use sequential when:**
+- Output dependencies exist (developer → debugger to verify)
+- Building on findings (research-lead → ml-researcher to validate)
+- Iterative refinement needed (developer ↔ debugger cycles)
+- Each phase informs the next
 
 ## PART 4: When to Create Workflows vs Direct Execution
 
-**Create a workflow when:**
-- Task requires specialized expertise (statistical, ML, debugging, etc.)
-- Multiple aspects to analyze or implement
-- Research questions needing validation
-- Complex implementation with design phase
-- Human requests "orchestrate" or mentions multiple steps
-- Task would benefit from parallel analysis
+**DEFAULT: Handle directly unless user requests orchestration**
 
-**Handle directly WITHOUT workflow:**
+Quick assessment:
+- Can I complete this in <30 seconds? → Do it directly
+- Is it a simple implementation/fix? → Do it directly
+- Does it need specialized expertise? → Consider workflow
+- Multiple complex aspects? → Consider workflow
+
+**MUST create workflow when user explicitly commands:**
+- "Orchestrate this"
+- "Use agents for this"
+- "Have [specific agent] analyze this"
+
+**MAY create workflow when user permits:**
+- "You can use agents if needed"
+- "Feel free to orchestrate if it helps"
+- "Use the team if you think it's worthwhile"
+- (In these cases, I assess if it's actually needed)
+
+**Consider workflow when permitted AND:**
+- Task genuinely needs multiple specialized perspectives
+- High-stakes decision requiring audit trail
+- Complex analysis beyond my direct capabilities
+
+**Always handle directly:**
 - Simple file I/O (read/write, no analysis)
 - Basic code edits (<10 lines, no domain expertise)
 - Git operations (status, diff, commit)
-- Cosmetic fixes (formatting, comments)
-- Human explicitly says "you do it" or "just handle this"
-- Single straightforward task with clear execution
+- Exploratory checks ("let me see what's there")
+- Time-sensitive fixes
+- When runtime/token efficiency matters
 
 ## PART 5: Workflow Creation
 
@@ -194,5 +219,18 @@ Task(subagent_type="research-lead", prompt="[context + task]")
 ```
 
 **Multiple agents in parallel:** Single message with multiple Task invocations
+
+**When to include "ultrathink":**
+- Complex debugging or root cause analysis
+- Statistical analysis or hypothesis testing
+- Architecture design decisions
+- Performance optimization
+- Any task requiring deep reasoning
+
+**Skip ultrathink for:**
+- Simple file operations
+- Basic code formatting
+- Straightforward lookups
+- Time-sensitive simple tasks
 
 **When unclear which agent:** Default to research-lead for analysis, architect for design
