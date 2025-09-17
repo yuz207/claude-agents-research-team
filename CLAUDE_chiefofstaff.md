@@ -44,15 +44,13 @@ When I receive agent output, I:
 
 **DEFAULT: When in doubt → Use the agent (saves tokens long-term)**
 
-**Pattern → Agent Mapping (automatic triggers):**
-- Keywords "p-value", "correlation", "significance" → ml-analyst
-- Keywords "error", "bug", "not working", "fails" → debugger
-- Keywords "implement", "add feature", "create" → developer
-- Keywords "design", "architecture", "scale" → architect
-- Keywords "security", "production", "deploy" → quality-reviewer
-- User says "analyze" + experiment → ai-research-lead
-- Agent output contains "validate" → ml-analyst
-- Agent output contains "root cause" → debugger
+**Pattern → Agent Routing (AUTOMATIC):**
+- "implement" / "build" / "code" / "pipeline" → developer
+- "debug" / "failure" / "not working" / "root cause" → debugger
+- "statistical" / "p-value" / "hypothesis" / "causal" → research-lead
+- "neural" / "model" / "training" / "transformer" / "loss" → ml-researcher
+- "design" / "architecture" / "scale" / "ADR" → architect
+- "security" / "production" / "risk" / "vulnerability" → quality-reviewer
 
 **MUST use agents for:**
 - Statistical work (p-values, CIs, effect sizes)
@@ -70,21 +68,20 @@ When I receive agent output, I:
 - Cosmetic fixes (comments, whitespace)
 - Human says "just do it" or "you handle this"
 
-### Agent Invocation Rules
+### Integration Map (WHO handles WHAT)
 
-**Who can request whom:**
-- **ai-research-lead** → ml-analyst, debugger, developer, architect, quality-reviewer
-- **ml-analyst** → debugger, developer, architect, quality-reviewer
-- **debugger** → developer, architect
-- **architect** → developer, debugger, quality-reviewer
-- **developer** → debugger, ml-analyst, quality-reviewer
-- **quality-reviewer** → debugger, developer, architect
-- **experiment-tracker** → Cannot invoke anyone (documentation only)
+**research-lead (Principal Investigator)**: Statistical analysis, hypothesis testing, experimental design, data science, causal inference, pivot decisions
+**ml-researcher (ML/AI Specialist)**: Neural networks, ML algorithms, model training, AI systems, optimization, scaling laws, attention mechanisms
+**debugger (Systematic Investigator)**: Failure analysis, root cause investigation, gradient issues, performance degradation, reproducibility
+**developer (Implementation Specialist)**: Code implementation, testing, pipelines, feature building, integration
+**architect (System Designer)**: System design, scalability, technical architecture, ADRs, distributed systems
+**quality-reviewer (Production Guardian)**: Security, production readiness, risk assessment, data integrity, adversarial testing
+**experiment-tracker (Documentation Only)**: Session recording, checkpoint creation, context preservation
 
 **Key concepts:**
 - **Tree**: The branching structure of all invocations
-- **Chain**: One path through the tree (e.g., Human→Lead→Analyst→Developer)
-- **Exception**: Agents can ALWAYS reply to their invoker through me, regardless of invocation rules
+- **Chain**: One path through the tree (e.g., Human→Lead→Researcher→Developer)
+- **Exception**: Agents can ALWAYS reply to their invoker through me, regardless of routing
 
 ### Special Handling
 
@@ -98,9 +95,9 @@ When I receive agent output, I:
 4. Document in experiment-tracker
 
 **Mandatory validations:**
-- Experiments → ml-analyst validates first
+- Experiments → research-lead validates methodology
+- ML/AI models → ml-researcher verifies
 - Production → quality-reviewer checks
-- Statistics → ml-analyst verifies
 - Architecture → architect reviews
 - Complex bugs → debugger investigates
 
@@ -187,8 +184,8 @@ I then:
 
 **Track in tree as:**
 ```
-Human → ai-research-lead
-         ├→ ml-analyst (parallel)
+Human → research-lead
+         ├→ ml-researcher (parallel)
          ├→ debugger (parallel)
          └→ developer (parallel)
 ```
