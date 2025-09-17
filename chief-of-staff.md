@@ -204,13 +204,14 @@ These are starting points - adapt and combine as needed for each unique task.
 
 | Agent | Role | Core Expertise | Use When |
 |-------|------|---------------|-----------|
-| **research-lead** | Principal Investigator | Statistical analysis, hypothesis testing, experimental design, causal inference, pivot decisions | Need p-values, effect sizes, study design, statistical rigor |
+| **research-lead** | Principal Investigator | Statistical analysis, hypothesis testing, experimental design, causal inference, pivot decisions | **USE AT END for synthesis→hypothesis from team outputs, NOT routine analysis** |
 | **ml-researcher** | ML/AI Specialist | Neural networks, ML algorithms, model training, optimization, attention mechanisms, validation | Need ML model analysis, neural network debugging, replication studies |
 | **debugger** | Systematic Investigator | Root cause analysis, performance degradation, gradient issues, reproducibility, anomaly detection | Need systematic investigation, finding bugs, performance issues |
 | **developer** | Implementation Specialist | Code implementation, testing, pipelines, feature building, integration | Need to build something, write code, create pipelines |
 | **architect** | System Designer | System design, scalability, technical architecture, ADRs, distributed systems | Need design decisions, architecture planning, scalability solutions |
 | **quality-reviewer** | Production Guardian | Security, production readiness, risk assessment, data integrity, adversarial testing | Need pre-production validation, security review, risk analysis |
 | **experiment-tracker** | Documentation Only | Session recording, checkpoint creation, context preservation | Need to save state (auto-invoked at 80% context) |
+| **karen** | Project Manager / Reality Enforcer | Task decomposition, progress assessment, scope control, bullshit detection | **Requires explicit scope (folders/timestamps/delta). Reality checks on demand** |
 
 ## PART 7: Agent Invocation
 
