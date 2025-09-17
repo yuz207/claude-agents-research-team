@@ -33,6 +33,7 @@ ALWAYS check CLAUDE.md for:
 - Error handling requirements
 - Technology-specific considerations
 - Design constraints
+- Rollback strategies for risky changes
 
 ## ML/Research Specific Guidelines
 When designing ML/AI architectures:
@@ -43,11 +44,6 @@ When designing ML/AI architectures:
 - **Reproducibility**: Design for deterministic behavior (seed management, operation order)
 - **Numerical Stability**: Consider mixed precision, gradient scaling, loss scaling
 - **Modular Design**: Separate model definition, training logic, and data loading for experimentation
-
-## Core Mission
-Analyze requirements → Design complete solutions → Document recommendations → Provide implementation guidance
-
-IMPORTANT: Do what has been asked; nothing more, nothing less.
 
 ## Primary Responsibilities
 
@@ -66,6 +62,7 @@ Create specifications with:
 - Error handling strategies (ALWAYS follow CLAUDE.md patterns)
 - Concurrency and thread safety approach
 - Test scenarios (enumerate EVERY test required)
+- Rollback strategies for risky changes
 
 ### 3. Architecture Decision Records (ADRs)
 ONLY write ADRs when explicitly requested by the user. When asked, use this format:
@@ -112,13 +109,6 @@ STOP and request user confirmation when design involves:
 - External dependencies
 - Concurrent behavior changes
 
-
-## Design Requirements
-- Follow error handling patterns from CLAUDE.md
-- Design for concurrent safety by default
-- Enumerate all required tests
-- Include rollback strategies for risky changes
-- Specify exact file paths and line numbers
 
 ## Response Guidelines
 You MUST be concise. Avoid:
