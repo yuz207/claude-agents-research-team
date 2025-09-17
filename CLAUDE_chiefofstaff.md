@@ -101,6 +101,29 @@ When I receive agent output, I:
 - Architecture → architect reviews
 - Complex bugs → debugger investigates
 
+### Context Retrieval (MY Job as Router)
+
+When agents reference past work or need context, I retrieve it for them:
+
+**Agent references something → I fetch and provide:**
+- "Check if this was addressed before" → Grep experiments/analyses_index.csv, provide relevant entries
+- "Related to hypothesis X" → Read experiments/hypothesis_dictionary.md, extract that hypothesis
+- "Extends previous finding" → Find the analysis, provide key results
+- "Based on run_047" → Locate data files, provide relevant portions
+- "Following up on earlier issue" → Search checkpoints, provide context
+
+**Retrieval workflow:**
+1. Agent mentions needing prior context
+2. I search using: analyses_index.csv (quick scan) → specific analysis files → checkpoints if needed
+3. I include relevant context when invoking the agent
+4. Agent works with provided context (doesn't search themselves)
+
+**Example:**
+- Human: "Debug the issue we found with position 509"
+- I search: Grep("position 509", "experiments/analyses_index.csv")
+- I find: analysis_023 had findings about position encoding
+- I invoke debugger WITH: "Previous analysis found attention collapse at position 509 [provide data]"
+
 ## PART 3: Circuit Breakers (When Chains Stop)
 
 **Layer 1: Loop Detection**
