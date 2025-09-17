@@ -22,7 +22,6 @@ Core principles:
 - Dynamic routing decisions (not pre-planned)
 - Maintaining state across session boundaries
 - Complex conditional logic mid-workflow
-- Workflows exceeding ~15 agent invocations (context limit)
 
 ## PART 2: Context Preservation Protocol
 
@@ -146,89 +145,36 @@ Between workflow phases, I MUST:
 
 ### Parallel Execution Rules
 
-**Safe for parallel:** Independent analysis tasks
-```
-Phase 1 (Parallel Discovery):
-- research-lead -> phase1_research_statistical_analysis_pvalues_effectsizes.md
-- ml-researcher -> phase1_ml_validation_robustness_checks.md
-- debugger -> phase1_debug_anomaly_detection_outliers.md
-```
+**Parallel:** Use when tasks are independent (separate output files)
+**Sequential:** Use when tasks depend on previous outputs
 
-**NOT safe for parallel:** Sequential dependencies
-```
-Phase 2 (Sequential):
-- architect reads synthesis -> phase2_architecture.md
-- developer reads architecture -> phase2_implementation.md
-```
+## PART 4: When to Create Workflows vs Direct Execution
 
-## PART 4: Research Workflow Templates
+**Create a workflow when:**
+- Task requires specialized expertise (statistical, ML, debugging, etc.)
+- Multiple aspects to analyze or implement
+- Research questions needing validation
+- Complex implementation with design phase
+- Human requests "orchestrate" or mentions multiple steps
+- Task would benefit from parallel analysis
 
-### Template 1: Hypothesis Validation Workflow
+**Handle directly WITHOUT workflow:**
+- Simple file I/O (read/write, no analysis)
+- Basic code edits (<10 lines, no domain expertise)
+- Git operations (status, diff, commit)
+- Cosmetic fixes (formatting, comments)
+- Human explicitly says "you do it" or "just handle this"
+- Single straightforward task with clear execution
 
-**When to use:** Testing specific hypothesis with statistical rigor
+## PART 5: Common Workflow Patterns
 
-```markdown
-## Phase 1: Statistical Analysis
-- research-lead: Analyze data, compute p-values, effect sizes
-- Output: phase1_statistical_analysis.md
+**Hypothesis Validation:** research-lead → ml-researcher → architect → developer → quality-reviewer
 
-## Phase 2: Validation
-- ml-researcher: Validate findings, check robustness
-- Output: phase2_validation_results.md
+**Discovery Research:** [parallel: research-lead, ml-researcher, debugger] → synthesis → deep dive
 
-## Phase 3: Implementation (if validated)
-- architect: Design solution
-- developer: Implement
-- Outputs: phase3_design.md, phase3_implementation.md
+**Debug & Fix:** debugger → architect → developer → quality-reviewer
 
-## Phase 4: Quality Check
-- quality-reviewer: Production readiness
-- Output: phase4_review.md
-```
-
-### Template 2: Discovery Research Workflow
-
-**When to use:** Exploratory analysis with unknown patterns
-
-```markdown
-## Phase 1: Parallel Discovery
-- research-lead: Statistical exploration
-- ml-researcher: Pattern recognition
-- debugger: Anomaly detection
-- Outputs: phase1_[agent]_discovery.md
-
-[Synthesis: phase1_synthesis.md]
-
-## Phase 2: Deep Dive
-- [Selected agent based on Phase 1]: Focused investigation
-- Output: phase2_deep_analysis.md
-
-## Phase 3: Recommendations
-- architect: System design if needed
-- Output: phase3_recommendations.md
-```
-
-### Template 3: Debug and Fix Workflow
-
-**When to use:** Investigating and fixing complex issues
-
-```markdown
-## Phase 1: Root Cause Analysis
-- debugger: Systematic investigation
-- ml-researcher: Model behavior analysis (if ML-related)
-- Outputs: phase1_debug_findings.md, phase1_ml_analysis.md
-
-## Phase 2: Solution Design
-- architect: Design fix approach
-- Output: phase2_solution_design.md
-
-## Phase 3: Implementation
-- developer: Implement fix
-- quality-reviewer: Validate fix
-- Outputs: phase3_implementation.md, phase3_validation.md
-```
-
-## PART 5: Special Handling Protocols
+## PART 6: Special Handling Protocols
 
 ### Research-Lead (PI) Outputs
 
@@ -261,7 +207,7 @@ When research-lead completes, ALWAYS check for:
 2. I read checkpoint and relevant files
 3. I resume workflow from next phase
 
-## PART 6: Agent Directory - Expertise Reference
+## PART 7: Agent Directory - Expertise Reference
 
 | Agent | Role | Core Expertise | Use When |
 |-------|------|---------------|-----------|
@@ -273,44 +219,13 @@ When research-lead completes, ALWAYS check for:
 | **quality-reviewer** | Production Guardian | Security, production readiness, risk assessment, data integrity, adversarial testing | Need pre-production validation, security review, risk analysis |
 | **experiment-tracker** | Documentation Only | Session recording, checkpoint creation, context preservation | Need to save state (auto-invoked at 80% context) |
 
-## PART 7: Operational Examples
+## PART 8: Agent Invocation
 
-### Example 1: Orchestrated Research Workflow
-
+**How to invoke agents:** Use Task tool with subagent_type parameter
 ```
-Human: "Orchestrate validation of hypothesis H023 about model degradation"
-
-Me: "I'll orchestrate a 3-phase validation workflow:
-
-Phase 1: Statistical Analysis
-- research-lead will analyze the data
-
-Phase 2: ML Validation
-- ml-researcher will validate findings
-
-Phase 3: Implementation (if validated)
-- architect and developer will design/implement fix
-
-Creating workflow directory: agent_notes/20250117_h023_validation/
-Executing Phase 1..."
-
-[I invoke research-lead with context file]
-[Read output, create synthesis]
-[Continue with Phase 2...]
+Task(subagent_type="research-lead", prompt="[context + task]")
 ```
 
-### Example 2: Simple Task (No Orchestration)
+**Multiple agents in parallel:** Single message with multiple Task invocations
 
-```
-Human: "Check git status"
-
-Me: [Executes directly without orchestration]
-```
-
-## Key Success Factors
-
-1. **I create the workflow plan myself** (95% success rate)
-2. **Clear file naming conventions** prevent confusion
-3. **Separate files per agent** avoid conflicts
-4. **Synthesis between phases** maintains context
-5. **Everything documented** for audit trail
+**When unclear which agent:** Default to research-lead for analysis, architect for design
