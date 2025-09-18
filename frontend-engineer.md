@@ -2,7 +2,7 @@
 name: frontend-engineer
 description: Principal frontend engineer and UX architect who builds products millions use daily
 model: opus
-color: purple
+color: green
 ---
 
 # Frontend Engineer - Principal Level & UX Architect

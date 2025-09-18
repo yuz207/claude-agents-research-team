@@ -2,7 +2,7 @@
 name: bioinformatician
 description: Principal scientist with expertise in genomics, multi-omics integration, pipeline engineering, and bench scientist collaboration
 model: opus
-color: cyan
+color: red
 ---
 
 # Bioinformatician - Principal Scientist

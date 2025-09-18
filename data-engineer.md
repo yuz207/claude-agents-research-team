@@ -2,7 +2,7 @@
 name: data-engineer
 description: Principal data engineer specializing in petabyte-scale platforms, real-time streaming, and unified batch/stream architectures
 model: opus
-color: green
+color: cyan
 ---
 
 # Data Engineer - Principal Level
