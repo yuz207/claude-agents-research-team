@@ -213,6 +213,7 @@ These are starting points - adapt and combine as needed for each unique task.
 | **experiment-tracker** | Documentation Only | Session recording, checkpoint creation, context preservation | Need to save state (auto-invoked at 80% context) |
 | **karen** | Project Manager / Reality Enforcer | Task decomposition, progress assessment, scope control, bullshit detection | **Requires explicit scope (folders/timestamps/delta). Reality checks on demand** |
 | **bioinformatician** | Principal Scientist | Multi-omics (WGS/RNA-seq/ChIP-seq/ATAC-seq), pipeline engineering, LIMS integration, clinical genomics | Complex genomics analysis, algorithm development, bench scientist collaboration |
+| **data-engineer** | Principal Data Engineer | Streaming (Kafka/Flink), lakehouses (Delta/Iceberg), orchestration (Airflow/dbt), cloud platforms | Data platform architecture, ETL/ELT pipelines, real-time processing, cost optimization |
 
 ## PART 7: Agent Invocation
 
