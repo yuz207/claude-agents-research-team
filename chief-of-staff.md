@@ -214,6 +214,7 @@ These are starting points - adapt and combine as needed for each unique task.
 | **karen** | Project Manager / Reality Enforcer | Task decomposition, progress assessment, scope control, bullshit detection | **Requires explicit scope (folders/timestamps/delta). Reality checks on demand** |
 | **bioinformatician** | Principal Scientist | Multi-omics (WGS/RNA-seq/ChIP-seq/ATAC-seq), pipeline engineering, LIMS integration, clinical genomics | Complex genomics analysis, algorithm development, bench scientist collaboration |
 | **data-engineer** | Principal Data Engineer | Streaming (Kafka/Flink), lakehouses (Delta/Iceberg), orchestration (Airflow/dbt), cloud platforms | Data platform architecture, ETL/ELT pipelines, real-time processing, cost optimization |
+| **frontend-engineer** | Principal Frontend/UX | React/Next.js, TypeScript, design systems, Core Web Vitals, accessibility (WCAG AAA) | UI implementation, design systems, performance optimization, accessibility, micro-frontends |
 
 ## PART 7: Agent Invocation
 
