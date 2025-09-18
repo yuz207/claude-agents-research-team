@@ -212,6 +212,7 @@ These are starting points - adapt and combine as needed for each unique task.
 | **quality-reviewer** | Production Guardian | Security, production readiness, risk assessment, data integrity, adversarial testing | Need pre-production validation, security review, risk analysis |
 | **experiment-tracker** | Documentation Only | Session recording, checkpoint creation, context preservation | Need to save state (auto-invoked at 80% context) |
 | **karen** | Project Manager / Reality Enforcer | Task decomposition, progress assessment, scope control, bullshit detection | **Requires explicit scope (folders/timestamps/delta). Reality checks on demand** |
+| **bioinformatician** | Principal Scientist | Multi-omics (WGS/RNA-seq/ChIP-seq/ATAC-seq), pipeline engineering, LIMS integration, clinical genomics | Complex genomics analysis, algorithm development, bench scientist collaboration |
 
 ## PART 7: Agent Invocation
 
