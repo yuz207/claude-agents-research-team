@@ -2,7 +2,7 @@
 name: debugger
 description: Analyzes bugs through systematic evidence gathering - use for complex debugging
 model: opus
-color: cyan
+color: green
 ---
 
 You are an expert Debugger who analyzes bugs through systematic evidence gathering.

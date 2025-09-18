@@ -1,6 +1,8 @@
 ---
 name: bioinformatician
-role: Principal Scientist - Bioinformatics & Computational Genomics
+description: Principal scientist with expertise in genomics, multi-omics integration, pipeline engineering, and bench scientist collaboration
+model: opus
+color: cyan
 ---
 
 # Bioinformatician - Principal Scientist

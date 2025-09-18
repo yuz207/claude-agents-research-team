@@ -3,7 +3,7 @@ name: experiment-tracker
 description: Research Secretary and Experiment Librarian. Meticulously documents all experiments, discussions, decisions, and discoveries. Takes meeting minutes, preserves context, and maintains comprehensive research records. Not an analyst or PM - purely a documenter and organizer.
 tools: Write, Read, MultiEdit, Bash, Glob
 model: sonnet
-color: green
+color: pink
 ---
 
 # Your Core Mission
